@@ -31,7 +31,7 @@ public class EventListener implements Listener {
 
 		if (TimeVoteManager.isVotingAtWorld(p.getWorld().getName())) {
 			TimeVote tv = TimeVoteManager.getVotingAtWorld(p.getWorld().getName());
-			if (!tv.timeoutPeriod) {
+			if (!tv.isTimeoutPeriod()) {
 				String text = plugin.msg.get("msg.3");
 				if (tv.getTime().equals("Day")) {
 					text = text.replace("[TIME]", plugin.msg.get("text.1"));
@@ -64,9 +64,15 @@ public class EventListener implements Listener {
 
 		if (TimeVoteManager.isVotingAtWorld(p.getWorld().getName())) {
 			TimeVote tv = TimeVoteManager.getVotingAtWorld(p.getWorld().getName());
-			if (!tv.timeoutPeriod) {
+			if (!tv.isTimeoutPeriod()) {
 				if (plugin.useScoreboard) {
 					tv.removeScoreboard(p.getName());
+				}
+				
+				if (plugin.prematureEnd) {
+					if (tv.checkPrematureEnd()) {
+						tv.prematureEnd();
+					}
 				}
 			}
 		}
@@ -82,9 +88,15 @@ public class EventListener implements Listener {
 
 		if (TimeVoteManager.isVotingAtWorld(p.getWorld().getName())) {
 			TimeVote tv = TimeVoteManager.getVotingAtWorld(p.getWorld().getName());
-			if (!tv.timeoutPeriod) {
+			if (!tv.isTimeoutPeriod()) {
 				if (plugin.useScoreboard) {
 					tv.removeScoreboard(p.getName());
+				}
+				
+				if (plugin.prematureEnd) {
+					if (tv.checkPrematureEnd()) {
+						tv.prematureEnd();
+					}
 				}
 			}
 		}
@@ -93,20 +105,29 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onWorldChange(PlayerChangedWorldEvent e) {
 		Player p = e.getPlayer();
-
+		
 		if (TimeVoteManager.containsOpenVoteingGUI(p.getName())) {
 			TimeVoteManager.closeVoteingGUI(p.getName(), true);
 		}
 
 		if (!e.getFrom().getName().equals(p.getWorld().getName())) {
 			if (TimeVoteManager.isVotingAtWorld(e.getFrom().getName())) {
-				if (plugin.useScoreboard) {
-					TimeVoteManager.getVotingAtWorld(p.getWorld().getName()).removeScoreboard(p.getName());
+				TimeVote tv = TimeVoteManager.getVotingAtWorld(e.getFrom().getName());
+				if (!tv.isTimeoutPeriod()) {
+					if (plugin.useScoreboard) {
+						tv.removeScoreboard(p.getName());
+					}
+					
+					if (plugin.prematureEnd) {
+						if (tv.checkPrematureEnd()) {
+							tv.prematureEnd();
+						}
+					}
 				}
 			}
 			if (TimeVoteManager.isVotingAtWorld(p.getWorld().getName())) {
 				TimeVote tv = TimeVoteManager.getVotingAtWorld(p.getWorld().getName());
-				if (!tv.timeoutPeriod) {
+				if (!tv.isTimeoutPeriod()) {
 					String text = plugin.msg.get("msg.3");
 					if (tv.getTime().equals("Day")) {
 						text = text.replace("[TIME]", plugin.msg.get("text.1"));

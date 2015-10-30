@@ -35,7 +35,6 @@ public class Main extends JavaPlugin {
 	boolean prematureEnd;
 	double price;
 	boolean rawMessages;
-	ArrayList<String> timeoutPeriodWorlds = new ArrayList<String>();
 	ArrayList<String> disabledWorlds = new ArrayList<String>();
 	boolean vault = false;
 	boolean updateAvailable = false;
@@ -61,7 +60,7 @@ public class Main extends JavaPlugin {
 
 			try {
 				ymlFileConfig.save(fileConfig);
-				ymlFileConfig.set("Version", 1.0);
+				ymlFileConfig.set("Version", 1.01);
 				ymlFileConfig.set("DayTime", 6000);
 				ymlFileConfig.set("NightTime", 18000);
 				ymlFileConfig.set("VotingTime", 35);
@@ -83,7 +82,7 @@ public class Main extends JavaPlugin {
 			double version = ymlFileConfig.getDouble("Version");
 			if (ymlFileConfig.getString("Version").equals("0.2")) {
 				try {
-					ymlFileConfig.set("Version", 1.0);
+					ymlFileConfig.set("Version", 1.01);
 					ymlFileConfig.set("UseScoreboard", true);
 					ymlFileConfig.set("UseVoteGUI", true);
 					ymlFileConfig.set("PrematureEnd", true);
@@ -93,9 +92,9 @@ public class Main extends JavaPlugin {
 				} catch (IOException e1) {
 
 				}
-			} else if (version < 1.0) {
+			} else if (version < 1.01) {
 				try {
-					ymlFileConfig.set("Version", 1.0);
+					ymlFileConfig.set("Version", 1.01);
 					if (version == 0.3) {
 						ymlFileConfig.set("PrematureEnd", true);
 					}
@@ -131,7 +130,7 @@ public class Main extends JavaPlugin {
 		if(!fileMessages.exists()){
 			try {
 				ymlFileMessage.save(fileMessages);
-				ymlFileMessage.set("Version", 1.0);
+				ymlFileMessage.set("Version", 1.01);
 				ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 				ymlFileMessage.set("Color.1", "&6");
 				ymlFileMessage.set("Color.2", "&e");
@@ -178,6 +177,8 @@ public class Main extends JavaPlugin {
 				ymlFileMessage.set("HelpText.7", "This command allows you to vote for yes or no.");
 				ymlFileMessage.set("HelpText.8", "' '");
 				ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
+				ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
+				ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
 				ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv yes\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 				ymlFileMessage.save(fileMessages);
 			} catch (IOException e1) {
@@ -226,15 +227,17 @@ public class Main extends JavaPlugin {
 					ymlFileMessage.set("HelpText.7", "This command allows you to vote for yes or no.");
 					ymlFileMessage.set("HelpText.8", "' '");
 					ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
+					ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
+					ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
 					ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv day\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
-					ymlFileMessage.set("Version", 1.0);
+					ymlFileMessage.set("Version", 1.01);
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
 
 				}
-			} else if (version < 1.0) {
+			} else if (version < 1.01) {
 				try {
-					ymlFileMessage.set("Version", 1.0);
+					ymlFileMessage.set("Version", 1.01);
 					if (version == 0.3) {
 						ymlFileMessage.set("Message.17", "All players have voted.");
 					}
@@ -270,6 +273,10 @@ public class Main extends JavaPlugin {
 						ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
 						ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &b( http://fof1092.de/TV )&9");
 					}
+					if (version <= 1.0) {
+						ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
+						ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
+					}
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
 
@@ -277,51 +284,53 @@ public class Main extends JavaPlugin {
 			}
 		}
 
-		msg.put("[TimeVote]",  ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("[TimeVote]")));
-		msg.put("color.1",  ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("Color.1")));
-		msg.put("color.2",  ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("Color.2")));
-		msg.put("msg.1",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.1")));
-		msg.put("msg.2",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.2")));
-		msg.put("msg.3",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.3")));
-		msg.put("msg.4",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.4")));
-		msg.put("msg.5",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.5")));
-		msg.put("msg.6",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.6")));
-		msg.put("msg.7",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.7")));
-		msg.put("msg.8",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.8")));
-		msg.put("msg.9",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.9")));
-		msg.put("msg.10",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.10")));
-		msg.put("msg.11",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.11")));
-		msg.put("msg.12",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.12")));
-		msg.put("msg.13",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.13")));
-		msg.put("msg.14",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.14")));
-		msg.put("msg.15",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.15")));
-		msg.put("msg.16",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.16")));
-		msg.put("msg.17",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.17")));
-		msg.put("msg.18",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.18")));
-		msg.put("msg.19",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.19")));
-		msg.put("msg.20",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.20")));
-		msg.put("msg.21",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.21")));
-		msg.put("msg.22",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.22")));
-		msg.put("text.1",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.1")));
-		msg.put("text.2",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.2")));
-		msg.put("text.3",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.3")));
-		msg.put("text.4",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.4")));
-		msg.put("statsText.1",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.1")));
-		msg.put("statsText.2",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.2")));
-		msg.put("statsText.3",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.3")));
-		msg.put("statsText.4",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.4")));
-		msg.put("statsText.5",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.5")));
-		msg.put("statsText.6",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.6")));
-		msg.put("statsText.7",  ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.7")));
-		msg.put("helpText.1",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.1")));
-		msg.put("helpText.2",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.2")));
-		msg.put("helpText.3",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.3")));
-		msg.put("helpText.4",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.4")));
-		msg.put("helpText.5",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.5")));
-		msg.put("helpText.6",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.6")));
-		msg.put("helpText.7",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.7")));
-		msg.put("helpText.8",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.8")));
-		msg.put("helpText.9",  ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.9")));
+		msg.put("[TimeVote]", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("[TimeVote]")));
+		msg.put("color.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("Color.1")));
+		msg.put("color.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("Color.2")));
+		msg.put("msg.1", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.1")));
+		msg.put("msg.2", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.2")));
+		msg.put("msg.3", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.3")));
+		msg.put("msg.4", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.4")));
+		msg.put("msg.5", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.5")));
+		msg.put("msg.6", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.6")));
+		msg.put("msg.7", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.7")));
+		msg.put("msg.8", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.8")));
+		msg.put("msg.9", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.9")));
+		msg.put("msg.10", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.10")));
+		msg.put("msg.11", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.11")));
+		msg.put("msg.12", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.12")));
+		msg.put("msg.13", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.13")));
+		msg.put("msg.14", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.14")));
+		msg.put("msg.15", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.15")));
+		msg.put("msg.16", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.16")));
+		msg.put("msg.17", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.17")));
+		msg.put("msg.18", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.18")));
+		msg.put("msg.19", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.19")));
+		msg.put("msg.20", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.20")));
+		msg.put("msg.21", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.21")));
+		msg.put("msg.22", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("Message.22")));
+		msg.put("text.1", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.1")));
+		msg.put("text.2", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.2")));
+		msg.put("text.3", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.3")));
+		msg.put("text.4", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("Text.4")));
+		msg.put("statsText.1", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.1")));
+		msg.put("statsText.2", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.2")));
+		msg.put("statsText.3", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.3")));
+		msg.put("statsText.4", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.4")));
+		msg.put("statsText.5", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.5")));
+		msg.put("statsText.6", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.6")));
+		msg.put("statsText.7", ChatColor.translateAlternateColorCodes('&', msg.get("color.1") + ymlFileMessage.getString("StatsText.7")));
+		msg.put("helpText.1", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.1")));
+		msg.put("helpText.2", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.2")));
+		msg.put("helpText.3", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.3")));
+		msg.put("helpText.4", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.4")));
+		msg.put("helpText.5", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.5")));
+		msg.put("helpText.6", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.6")));
+		msg.put("helpText.7", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.7")));
+		msg.put("helpText.8", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.8")));
+		msg.put("helpText.9", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.9")));
+		msg.put("votingInventoryTitle.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.1")));
+		msg.put("votingInventoryTitle.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.2")));
 		msg.put("rmsg.1", ymlFileMessage.getString("RawMessage.1"));
 
 		File fileStats = new File("plugins/TimeVote/Stats.yml");
@@ -330,7 +339,7 @@ public class Main extends JavaPlugin {
 		if(!fileStats.exists()){
 			try {
 				ymlFileStats.save(fileStats);
-				ymlFileStats.set("Version", 1.0);
+				ymlFileStats.set("Version", 1.01);
 				ymlFileStats.set("Date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 				ymlFileStats.set("Day.Yes", 0);
 				ymlFileStats.set("Day.No", 0);
@@ -346,14 +355,16 @@ public class Main extends JavaPlugin {
 
 			}
 		} else {
-			double version = ymlFileMessage.getDouble("Version");
-			if (version < 0.5) {
+			double version = ymlFileStats.getDouble("Version");
+			if (version < 1.01) {
 				try {
-					ymlFileMessage.set("Version", 1.0);
-					ymlFileStats.set("MoneySpent", 0.00);
-					ymlFileMessage.save(fileMessages);
+					ymlFileStats.set("Version", 1.01);
+					if (version < 0.5) {
+						ymlFileStats.set("MoneySpent", 0.00);
+					}
+					ymlFileStats.save(fileStats);
 				} catch (IOException e1) {
-
+					
 				}
 			}
 		}
@@ -364,7 +375,7 @@ public class Main extends JavaPlugin {
 			URLConnection verbindung = meineurl.openConnection();
 			final BufferedReader in = new BufferedReader(new InputStreamReader( verbindung.getInputStream()));
 
-			if (!in.readLine().equals("Version: 1.0")) {
+			if (!in.readLine().equals("Version: 1.0.1")) {
 				System.out.println("[TimeVote] A new update is available.");
 				updateAvailable = true;
 			}
@@ -385,7 +396,7 @@ public class Main extends JavaPlugin {
 
 			if (TimeVoteManager.isVotingAtWorld(w.getName())) {
 				TimeVote tv = TimeVoteManager.getVotingAtWorld(w.getName());
-				if (!tv.timeoutPeriod) {
+				if (!tv.isTimeoutPeriod()) {
 					if (useScoreboard) {
 						for (Player p : tv.getAllPlayersAtWorld()) {
 							tv.removeScoreboard(p.getName());
