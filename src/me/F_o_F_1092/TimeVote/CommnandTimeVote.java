@@ -110,7 +110,7 @@ public class CommnandTimeVote implements CommandExecutor {
 					cs.sendMessage(plugin.msg.get("statsText.5") + plugin.msg.get("color.2") + tvs.getDayNo());
 					cs.sendMessage(plugin.msg.get("statsText.6") + plugin.msg.get("color.2") + tvs.getDayWon());
 					cs.sendMessage(plugin.msg.get("statsText.7") + plugin.msg.get("color.2") + tvs.getDayLost());
-					cs.sendMessage(plugin.msg.get("statsText.3") + plugin.msg.get("color.2") + tvs.getNightVotes());
+					cs.sendMessage(plugin.msg.get("statsText.8") + plugin.msg.get("color.2") + tvs.getNightVotes());
 					cs.sendMessage(plugin.msg.get("statsText.4") + plugin.msg.get("color.2") + tvs.getNightYes());
 					cs.sendMessage(plugin.msg.get("statsText.5") + plugin.msg.get("color.2") + tvs.getNightNo());
 					cs.sendMessage(plugin.msg.get("statsText.6") + plugin.msg.get("color.2") + tvs.getNightWon());
