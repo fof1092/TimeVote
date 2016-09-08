@@ -24,6 +24,7 @@ public class TimeVote {
 	Integer task3;
 	boolean timeoutPeriod;
 	double moneySpend;
+	boolean onePlayerVoteing = false;
 	
 	TimeVote(String worldName, String player, String time, double moneySpend) {
 		if (plugin.useVoteGUI) {
@@ -40,15 +41,23 @@ public class TimeVote {
 		timeoutPeriod = false;
 		this.moneySpend = moneySpend;
 
-		if (plugin.useScoreboard) {  
-			for (Player p : getAllPlayersAtWorld()) {
-				setScoreboard(p.getName());
+		if (getAllPlayersAtWorld().size() == 1) {
+			this.onePlayerVoteing = true;
+			
+			this.voteYes(player);
+			
+			startTimer(2, 0);
+		} else {
+			if (plugin.useScoreboard) {  
+				for (Player p : getAllPlayersAtWorld()) {
+					setScoreboard(p.getName());
+				}
+				updateScore();
 			}
-			updateScore();
+	
+			startTimer(1, plugin.remindingTime);
+			startTimer(2, plugin.votingTime);
 		}
-
-		startTimer(1, plugin.remindingTime);
-		startTimer(2, plugin.votingTime);
 		startTimer(3, (plugin.timeoutPeriod + plugin.votingTime));
 	}
 	
@@ -61,14 +70,14 @@ public class TimeVote {
 			try {
 				objective.setDisplayName(plugin.msg.get("[TimeVote]") + plugin.msg.get("text.1"));
 			} catch (Exception e1) {
-				objective.setDisplayName("§f[§6Time§eVote§f] DAY");
+				objective.setDisplayName("Â§f[Â§6TimeÂ§eVoteÂ§f] DAY");
 				System.out.println("\u001B[31m[TimeVote] ERROR: 001 | The scoreboard name caused a problem. (Message: text.1) [" + e1.getMessage() +"]\u001B[0m");
 			}
 		} else {
 			try {
 				objective.setDisplayName(plugin.msg.get("[TimeVote]") + plugin.msg.get("text.2"));
 			} catch (Exception e1) {
-				objective.setDisplayName("§f[§6Time§eVote§f] NIGHT");
+				objective.setDisplayName("Â§f[Â§6TimeÂ§eVoteÂ§f] NIGHT");
 				System.out.println("\u001B[31m[TimeVote] ERROR: 002 | The scoreboard name caused a problem. (Message: text.2) [" + e1.getMessage() +"]\u001B[0m");
 			}
 		}
@@ -158,7 +167,10 @@ public class TimeVote {
 					TimeVoteStats tvs = new TimeVoteStats();
 
 					if (yes > no) {
-						sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.12"));
+						if (!onePlayerVoteing) {
+							sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.12"));
+						}
+						
 						if (time.equals("Day")) {
 							Bukkit.getWorld(worldName).setTime(plugin.dayTime);
 							tvs.setDayStats(getYesVotes(), getNoVotes(), true, moneySpend);
@@ -175,10 +187,12 @@ public class TimeVote {
 							tvs.setNightStats(getYesVotes(), getNoVotes(), false, moneySpend);
 						}
 					}
-
-					if (plugin.useScoreboard) {
-						for (Player p : getAllPlayersAtWorld()) {
-							removeScoreboard(p.getName());
+					
+					if (!onePlayerVoteing) {
+						if (plugin.useScoreboard) {
+							for (Player p : getAllPlayersAtWorld()) {
+								removeScoreboard(p.getName());
+							}
 						}
 					}
 
@@ -244,28 +258,32 @@ public class TimeVote {
 		this.players.add(player);
 		this.yes++;
 
-		if (plugin.useScoreboard) {
-			updateScore();
-		}
+		if (!this.onePlayerVoteing) {
+			if (plugin.useScoreboard) {
+				updateScore();
+			}
 
-		if (plugin.prematureEnd) {
-			if (checkPrematureEnd()) {
-				prematureEnd();
+			if (plugin.prematureEnd) {
+				if (checkPrematureEnd()) {
+					prematureEnd();
+				}
 			}
 		}
 	}
-	
+
 	void voteNo(String player) {
 		this.players.add(player);
 		this.no++;
 
-		if (plugin.useScoreboard) {
-			updateScore();
-		}
+		if (!this.onePlayerVoteing) {
+			if (plugin.useScoreboard) {
+				updateScore();
+			}
 
-		if (plugin.prematureEnd) {
-			if (checkPrematureEnd()) {
-				prematureEnd();
+			if (plugin.prematureEnd) {
+				if (checkPrematureEnd()) {
+					prematureEnd();
+				}
 			}
 		}
 	}

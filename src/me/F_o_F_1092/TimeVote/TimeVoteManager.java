@@ -27,7 +27,7 @@ public class TimeVoteManager {
 	}
 
 	public static Economy getVault() {
-		return Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
+		return Bukkit.getServer().getServicesManager().getRegistration(Economy.class).getProvider();
 	}
 
 	public static boolean isVaultInUse() {
@@ -43,18 +43,18 @@ public class TimeVoteManager {
 			try {
 				voteGUI = Bukkit.createInventory(null, 9, plugin.msg.get("votingInventoryTitle.1"));
 			} catch (Exception e1) {
-				voteGUI = Bukkit.createInventory(null, 9, "§f[§6T§eV§f]" + plugin.msg.get("color.2") + " Voting...");
+				voteGUI = Bukkit.createInventory(null, 9, "Â§f[Â§6TÂ§eVÂ§f]" + plugin.msg.get("color.2") + " Voting...");
 				System.out.println("\u001B[31m[TimeVote] ERROR: 005 | The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
 			voteGUIItemOne = new ItemStack(Material.WOOL, 1, (byte)4);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
-			voteGUIItemOneMeta.setDisplayName("§e" + plugin.msg.get("text.1").replace(plugin.msg.get("color.2"), ""));
+			voteGUIItemOneMeta.setDisplayName("Â§e" + plugin.msg.get("text.1").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
 			voteGUIItemTwo = new ItemStack(Material.WOOL, 1, (byte)11);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
-			voteGUIItemTwoMeta.setDisplayName("§9" + plugin.msg.get("text.2").replace(plugin.msg.get("color.2"), ""));
+			voteGUIItemTwoMeta.setDisplayName("Â§9" + plugin.msg.get("text.2").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
 		} else {
 			TimeVote tv = getVotingAtWorld(worldName);
@@ -63,18 +63,18 @@ public class TimeVoteManager {
 				replace = replace.replace("[TIME]", tv.getTime());
 				voteGUI = Bukkit.createInventory(null, 9, replace);
 			} catch (Exception e1) {
-				voteGUI = Bukkit.createInventory(null, 9, "§f[§6T§eV§f] " + plugin.msg.get("color.2") + tv.getTime());
+				voteGUI = Bukkit.createInventory(null, 9, "Â§f[Â§6TÂ§eVÂ§f] " + plugin.msg.get("color.2") + tv.getTime());
 				System.out.println("\u001B[31m[TimeVote] ERROR: 006 | The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
 			voteGUIItemOne = new ItemStack(Material.WOOL, 1, (byte)5);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
-			voteGUIItemOneMeta.setDisplayName("§a" + plugin.msg.get("text.3").replace(plugin.msg.get("color.2"), ""));
+			voteGUIItemOneMeta.setDisplayName("Â§a" + plugin.msg.get("text.3").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
 			voteGUIItemTwo = new ItemStack(Material.WOOL, 1, (byte)14);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
-			voteGUIItemTwoMeta.setDisplayName("§c" + plugin.msg.get("text.4").replace(plugin.msg.get("color.2"), ""));
+			voteGUIItemTwoMeta.setDisplayName("Â§c" + plugin.msg.get("text.4").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
 		}
 
@@ -96,7 +96,10 @@ public class TimeVoteManager {
 		if (closeInventory) {
 			Bukkit.getPlayer(player).closeInventory();
 		}
-		Bukkit.getPlayer(player).sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.21"));
+		
+		if (plugin.votingInventoryMessages) {
+			Bukkit.getPlayer(player).sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.21"));
+		}
 
 	}
 

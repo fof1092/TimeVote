@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -41,11 +42,15 @@ public class CommnandTimeVote implements CommandExecutor {
 						if (tv.isTimeoutPeriod()) {
 							p.sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.15"));
 						} else {
-							cs.sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.20"));
+							if (plugin.votingInventoryMessages) {
+								cs.sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.20"));
+							}
 							TimeVoteManager.openVoteingGUI(p.getName(), p.getWorld().getName());
 						}
 					} else {
-						cs.sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.20"));
+						if (plugin.votingInventoryMessages) {
+							cs.sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.20"));
+						}
 						TimeVoteManager.openVoteingGUI(p.getName(), p.getWorld().getName());
 					}
 				}
@@ -84,10 +89,10 @@ public class CommnandTimeVote implements CommandExecutor {
 					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv info");
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
-					cs.sendMessage("§6-----§f[§6Time§eVote§f]§6-----");
-					cs.sendMessage("§6Version: §e1.0.1");
-					cs.sendMessage("§6By: §eF_o_F_1092");
-					cs.sendMessage("§6TimeVote: §ehttp://fof1092.de/TV");
+					cs.sendMessage("Â§6-----Â§f[Â§6TimeÂ§eVoteÂ§f]Â§6-----");
+					cs.sendMessage("Â§6Version: Â§e1.0.2");
+					cs.sendMessage("Â§6By: Â§eF_o_F_1092");
+					cs.sendMessage("Â§6TimeVote: Â§ehttp://fof1092.de/TV");
 				}
 			} else if (args[0].equalsIgnoreCase("stats")) {
 				if (args.length != 1) {
@@ -139,16 +144,20 @@ public class CommnandTimeVote implements CommandExecutor {
 									TimeVote tv = null;
 
 									if (TimeVoteManager.isVaultInUse()) {
-										if (!TimeVoteManager.getVault().has(p.getName(), plugin.price)) {
+										if (!TimeVoteManager.getVault().has(p, plugin.price)) {
 											String text = plugin.msg.get("msg.18");
-											text = text.replace("[MONEY]", ((plugin.price * 100) - (TimeVoteManager.getVault().getBalance(p.getName()) * 100)) / 100 + "");
+											text = text.replace("[MONEY]", ((plugin.price * 100) - (TimeVoteManager.getVault().getBalance(p) * 100)) / 100 + "");
 											p.sendMessage(plugin.msg.get("[TimeVote]") + text);
+											
+											if (TimeVoteManager.containsOpenVoteingGUI(p.getName())) {
+												TimeVoteManager.closeVoteingGUI(p.getName(), true);
+											}
 										} else {
 											String text1 = plugin.msg.get("msg.19");
 											text1 = text1.replace("[MONEY]", plugin.price + "");
 											p.sendMessage(plugin.msg.get("[TimeVote]") + text1);
 
-											TimeVoteManager.getVault().withdrawPlayer(p.getName(), plugin.price);
+											TimeVoteManager.getVault().withdrawPlayer(p, plugin.price);
 
 											tv = new TimeVote(p.getWorld().getName(), p.getName(), "Day", plugin.price);
 										}
@@ -159,18 +168,24 @@ public class CommnandTimeVote implements CommandExecutor {
 											System.out.println("\u001B[31m[TimeVote] ERROR: 007 | The plugin Vault was not found, but a Voting-Price was set in the Config.yml file.\u001B[0m");
 										}
 									}
-									if (plugin.rawMessages) {
-										String text2 = plugin.msg.get("rmsg.1");
-										text2 = text2.replace("[TIME]", plugin.msg.get("text.1"));
-										text2 = text2.replace("[\"\",", "[\"\",{\"text\":\"" + plugin.msg.get("[TimeVote]") + "\"},");
-										tv.sendRawMessage(text2);
-									} else {
-										String text2 = plugin.msg.get("msg.3");
-										text2 = text2.replace("[TIME]", plugin.msg.get("text.1"));
-										tv.sendMessage(plugin.msg.get("[TimeVote]") + text2);
+									if (tv != null) {
+										if (tv.getAllPlayersAtWorld().size() == 1) {
+											String text = plugin.msg.get("msg.23");
+											text = text.replace("[TIME]", plugin.msg.get("text.1"));
+											p.sendMessage(plugin.msg.get("[TimeVote]") + text);
+										} else {
+											if (plugin.rawMessages) {
+												String text2 = plugin.msg.get("rmsg.1");
+												text2 = text2.replace("[TIME]", plugin.msg.get("text.1"));
+												text2 = text2.replace("[\"\",", "[\"\",{\"text\":\"" + plugin.msg.get("[TimeVote]") + "\"},");
+												tv.sendRawMessage(text2);
+											} else {
+												String text2 = plugin.msg.get("msg.3");
+												text2 = text2.replace("[TIME]", plugin.msg.get("text.1"));
+												tv.sendMessage(plugin.msg.get("[TimeVote]") + text2);
+											}
+										}
 									}
-
-									tv.voteYes(p.getName());
 								}
 							}
 						}
@@ -204,16 +219,20 @@ public class CommnandTimeVote implements CommandExecutor {
 									TimeVote tv = null;
 
 									if (TimeVoteManager.isVaultInUse()) {
-										if (!TimeVoteManager.getVault().has(p.getName(), plugin.price)) {
+										if (!TimeVoteManager.getVault().has(p, plugin.price)) {
 											String text = plugin.msg.get("msg.18");
-											text = text.replace("[MONEY]", ((plugin.price * 100) - (TimeVoteManager.getVault().getBalance(p.getName()) * 100)) / 100 + "");
+											text = text.replace("[MONEY]", ((plugin.price * 100) - (TimeVoteManager.getVault().getBalance(p) * 100)) / 100 + "");
 											p.sendMessage(plugin.msg.get("[TimeVote]") + text);
+											
+											if (TimeVoteManager.containsOpenVoteingGUI(p.getName())) {
+												TimeVoteManager.closeVoteingGUI(p.getName(), true);
+											}
 										} else {
 											String text1 = plugin.msg.get("msg.19");
 											text1 = text1.replace("[MONEY]", plugin.price + "");
 											p.sendMessage(plugin.msg.get("[TimeVote]") + text1);
 
-											TimeVoteManager.getVault().withdrawPlayer(p.getName(), plugin.price);
+											TimeVoteManager.getVault().withdrawPlayer(p, plugin.price);
 
 											tv = new TimeVote(p.getWorld().getName(), p.getName(), "Night", plugin.price);
 										}
@@ -224,19 +243,24 @@ public class CommnandTimeVote implements CommandExecutor {
 											System.out.println("\u001B[31m[TimeVote] ERROR: 007 | The plugin Vault was not found, but a Voting-Price was set in the Config.yml file.\u001B[0m");
 										}
 									}
-
-									if (plugin.rawMessages) {
-										String text2 = plugin.msg.get("rmsg.1");
-										text2 = text2.replace("[TIME]", plugin.msg.get("text.2"));
-										text2 = text2.replace("[\"\",", "[\"\",{\"text\":\"" + plugin.msg.get("[TimeVote]") + "\"},");
-										tv.sendRawMessage(text2);
-									} else {
-										String text2 = plugin.msg.get("msg.3");
-										text2 = text2.replace("[TIME]", plugin.msg.get("text.2"));
-										tv.sendMessage(plugin.msg.get("[TimeVote]") + text2);
+									if (tv != null) {
+										if (tv.getAllPlayersAtWorld().size() == 1) {
+											String text = plugin.msg.get("msg.23");
+											text = text.replace("[TIME]", plugin.msg.get("text.2"));
+											p.sendMessage(plugin.msg.get("[TimeVote]") + text);
+										} else {
+											if (plugin.rawMessages) {
+												String text2 = plugin.msg.get("rmsg.1");
+												text2 = text2.replace("[TIME]", plugin.msg.get("text.2"));
+												text2 = text2.replace("[\"\",", "[\"\",{\"text\":\"" + plugin.msg.get("[TimeVote]") + "\"},");
+												tv.sendRawMessage(text2);
+											} else {
+												String text2 = plugin.msg.get("msg.3");
+												text2 = text2.replace("[TIME]", plugin.msg.get("text.2"));
+												tv.sendMessage(plugin.msg.get("[TimeVote]") + text2);
+											}
+										}
 									}
-
-									tv.voteYes(p.getName());
 								}
 							}
 						}
@@ -353,7 +377,7 @@ public class CommnandTimeVote implements CommandExecutor {
 
 							try {
 								ymlFileConfig.save(fileConfig);
-								ymlFileConfig.set("Version", 1.01);
+								ymlFileConfig.set("Version", 1.02);
 								ymlFileConfig.set("DayTime", 6000);
 								ymlFileConfig.set("NightTime", 18000);
 								ymlFileConfig.set("VotingTime", 35);
@@ -365,9 +389,10 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileConfig.set("Price", 0.00);
 								ymlFileConfig.set("RawMessages", true);
 								ymlFileConfig.set("DisabledWorld", plugin.disabledWorlds);
+								ymlFileConfig.set("VotingInventoryMessages", true);
 								ymlFileConfig.save(fileConfig);
 							} catch (IOException e1) {
-
+								System.out.println("\u001B[31m[TimeVote] ERROR: 009 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 							}
 
 							plugin.disabledWorlds.clear();
@@ -375,19 +400,20 @@ public class CommnandTimeVote implements CommandExecutor {
 							double version = ymlFileConfig.getDouble("Version");
 							if (ymlFileConfig.getString("Version").equals("0.2")) {
 								try {
-									ymlFileConfig.set("Version", 1.01);
+									ymlFileConfig.set("Version", 1.02);
 									ymlFileConfig.set("UseScoreboard", true);
 									ymlFileConfig.set("UseVoteGUI", true);
 									ymlFileConfig.set("PrematureEnd", true);
 									ymlFileConfig.set("Price", 0.00);
 									ymlFileConfig.set("RawMessages", true);
+									ymlFileConfig.set("VotingInventoryMessages", true);
 									ymlFileConfig.save(fileConfig);
 								} catch (IOException e1) {
-
+									System.out.println("\u001B[31m[TimeVote] ERROR: 010 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
-							} else if (version < 1.01) {
+							} else if (version < 1.02) {
 								try {
-									ymlFileConfig.set("Version", 1.01);
+									ymlFileConfig.set("Version", 1.02);
 									if (version == 0.3) {
 										ymlFileConfig.set("PrematureEnd", true);
 									}
@@ -398,9 +424,12 @@ public class CommnandTimeVote implements CommandExecutor {
 									if (version <= 0.5) {
 										ymlFileConfig.set("UseVoteGUI", true);
 									}
+									if (version < 1.02) {
+										ymlFileConfig.set("VotingInventoryMessages", true);
+									}
 									ymlFileConfig.save(fileConfig);
 								} catch (IOException e1) {
-
+									System.out.println("\u001B[31m[TimeVote] ERROR: 011 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
 							}
 						}
@@ -416,14 +445,15 @@ public class CommnandTimeVote implements CommandExecutor {
 						plugin.price = ymlFileConfig.getDouble("Price");
 						plugin.rawMessages = ymlFileConfig.getBoolean("RawMessages");
 						plugin.disabledWorlds.addAll(ymlFileConfig.getStringList("DisabledWorld"));
-
+						plugin.votingInventoryMessages = ymlFileConfig.getBoolean("VotingInventoryMessages");
+						
 						File fileMessages = new File("plugins/TimeVote/Messages.yml");
 						FileConfiguration ymlFileMessage = YamlConfiguration.loadConfiguration(fileMessages);
 
-						if(!fileMessages.exists()){
+						if(!fileMessages.exists()) {
 							try {
 								ymlFileMessage.save(fileMessages);
-								ymlFileMessage.set("Version", 1.01);
+								ymlFileMessage.set("Version", 1.02);
 								ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 								ymlFileMessage.set("Color.1", "&6");
 								ymlFileMessage.set("Color.2", "&e");
@@ -442,13 +472,14 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileMessage.set("Message.13", "The voting is over, the time hasn't been changed.");
 								ymlFileMessage.set("Message.14", "The voting for &e[TIME]&6 time is over in &e[SECONDS]&6 seconds.");
 								ymlFileMessage.set("Message.15", "You have to wait a bit, until you can start a new voting.");
-								ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &b( http://fof1092.de/TV )&9");
+								ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
 								ymlFileMessage.set("Message.17", "All players have voted.");
 								ymlFileMessage.set("Message.18", "You need &e[MONEY]$&6 more to start a voting.");
 								ymlFileMessage.set("Message.19", "You payed &e[MONEY]$&6 to start a voting.");
 								ymlFileMessage.set("Message.20", "You opend the Voting-Inventory.");
 								ymlFileMessage.set("Message.21", "Your Voting-Inventory has been closed.");
 								ymlFileMessage.set("Message.22", "Try [COMMAND]");
+								ymlFileMessage.set("Message.23", "You changed the time to &e[TIME]&6.");
 								ymlFileMessage.set("Text.1", "DAY");
 								ymlFileMessage.set("Text.2", "NIGHT");
 								ymlFileMessage.set("Text.3", "YES");
@@ -475,7 +506,7 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv yes\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 								ymlFileMessage.save(fileMessages);
 							} catch (IOException e1) {
-
+								System.out.println("\u001B[31m[TimeVote] ERROR: 012 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 							}
 						} else {
 							double version = ymlFileMessage.getDouble("Version");
@@ -488,17 +519,18 @@ public class CommnandTimeVote implements CommandExecutor {
 									ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 									ymlFileMessage.set("Color.1", "&6");
 									ymlFileMessage.set("Color.2", "&e");
-									ymlFileMessage.set("Message.3", "There is a new voting for &e[TIME]&6 time, vote with &e/tv yes§6 or &e/tv no&6.");
+									ymlFileMessage.set("Message.3", "There is a new voting for &e[TIME]&6 time, vote with &e/tv yesï¿½6 or &e/tv no&6.");
 									ymlFileMessage.set("Message.8", "You have voted for &eYES&6.");
 									ymlFileMessage.set("Message.9", "You have voted for &eNO&6.");
 									ymlFileMessage.set("Message.14", "The voting for &e[TIME]&6 time is over in &e[SECONDS]&6 seconds.");
-									ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &b( http://fof1092.de/TV )&9");
+									ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
 									ymlFileMessage.set("Message.17", "All players have voted.");
 									ymlFileMessage.set("Message.18", "You need &e[MONEY]$&6 more to start a voting.");
 									ymlFileMessage.set("Message.19", "You payed &e[MONEY]$&6 to start a voting.");
 									ymlFileMessage.set("Message.20", "You opend the voting-inventory.");
 									ymlFileMessage.set("Message.21", "You'r voting-inventory has been closed.");
 									ymlFileMessage.set("Message.22", "Try [COMMAND]");
+									ymlFileMessage.set("Message.23", "You changed the time to &e[TIME]&6.");
 									ymlFileMessage.set("Text.1", "DAY");
 									ymlFileMessage.set("Text.2", "NIGHT");
 									ymlFileMessage.set("Text.3", "YES");
@@ -523,14 +555,14 @@ public class CommnandTimeVote implements CommandExecutor {
 									ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 									ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
 									ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv day\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
-									ymlFileMessage.set("Version", 1.01);
+									ymlFileMessage.set("Version", 1.02);
 									ymlFileMessage.save(fileMessages);
 								} catch (IOException e1) {
-
+									System.out.println("\u001B[31m[TimeVote] ERROR: 013 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
-							} else if (version < 1.01) {
+							} else if (version < 1.02) {
 								try {
-									ymlFileMessage.set("Version", 1.01);
+									ymlFileMessage.set("Version", 1.02);
 									if (version == 0.3) {
 										ymlFileMessage.set("Message.17", "All players have voted.");
 									}
@@ -564,15 +596,18 @@ public class CommnandTimeVote implements CommandExecutor {
 										ymlFileMessage.set("HelpText.7", "This command allows you to vote for yes or no.");
 										ymlFileMessage.set("HelpText.8", "' '");
 										ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
-										ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &b( http://fof1092.de/TV )&9");
+										ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
 									}
 									if (version <= 1.0) {
 										ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 										ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
 									}
+									if (version < 1.02) {
+										ymlFileMessage.set("Message.23", "You changed the time to &e[TIME]&6.");
+									}
 									ymlFileMessage.save(fileMessages);
 								} catch (IOException e1) {
-
+									System.out.println("\u001B[31m[TimeVote] ERROR: 014 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
 							}
 						}
@@ -580,28 +615,29 @@ public class CommnandTimeVote implements CommandExecutor {
 						plugin.msg.put("[TimeVote]", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("[TimeVote]")));
 						plugin.msg.put("color.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("Color.1")));
 						plugin.msg.put("color.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("Color.2")));
-						plugin.msg.put("msg.1", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.1")));
-						plugin.msg.put("msg.2", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.2")));
-						plugin.msg.put("msg.3", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.3")));
-						plugin.msg.put("msg.4", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.4")));
-						plugin.msg.put("msg.5", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.5")));
-						plugin.msg.put("msg.6", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.6")));
-						plugin.msg.put("msg.7", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.7")));
-						plugin.msg.put("msg.8", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.8")));
-						plugin.msg.put("msg.9", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.9")));
-						plugin.msg.put("msg.10", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.10")));
-						plugin.msg.put("msg.11", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.11")));
-						plugin.msg.put("msg.12", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.12")));
-						plugin.msg.put("msg.13", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.13")));
-						plugin.msg.put("msg.14", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.14")));
-						plugin.msg.put("msg.15", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.15")));
-						plugin.msg.put("msg.16", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.16")));
-						plugin.msg.put("msg.17", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.17")));
-						plugin.msg.put("msg.18", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.18")));
-						plugin.msg.put("msg.19", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.19")));
-						plugin.msg.put("msg.20", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.20")));
-						plugin.msg.put("msg.21", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.21")));
-						plugin.msg.put("msg.22", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.22")));
+						plugin.msg.put("plugin.msg.1", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.1")));
+						plugin.msg.put("plugin.msg.2", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.2")));
+						plugin.msg.put("plugin.msg.3", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.3")));
+						plugin.msg.put("plugin.msg.4", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.4")));
+						plugin.msg.put("plugin.msg.5", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.5")));
+						plugin.msg.put("plugin.msg.6", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.6")));
+						plugin.msg.put("plugin.msg.7", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.7")));
+						plugin.msg.put("plugin.msg.8", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.8")));
+						plugin.msg.put("plugin.msg.9", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.9")));
+						plugin.msg.put("plugin.msg.10", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.10")));
+						plugin.msg.put("plugin.msg.11", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.11")));
+						plugin.msg.put("plugin.msg.12", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.12")));
+						plugin.msg.put("plugin.msg.13", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.13")));
+						plugin.msg.put("plugin.msg.14", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.14")));
+						plugin.msg.put("plugin.msg.15", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.15")));
+						plugin.msg.put("plugin.msg.16", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.16")));
+						plugin.msg.put("plugin.msg.17", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.17")));
+						plugin.msg.put("plugin.msg.18", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.18")));
+						plugin.msg.put("plugin.msg.19", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.19")));
+						plugin.msg.put("plugin.msg.20", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.20")));
+						plugin.msg.put("plugin.msg.21", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.21")));
+						plugin.msg.put("plugin.msg.22", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.22")));
+						plugin.msg.put("plugin.msg.23", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.1") + ymlFileMessage.getString("Message.23")));
 						plugin.msg.put("text.1", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("Text.1")));
 						plugin.msg.put("text.2", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("Text.2")));
 						plugin.msg.put("text.3", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("Text.3")));
@@ -632,7 +668,7 @@ public class CommnandTimeVote implements CommandExecutor {
 						if(!fileStats.exists()){
 							try {
 								ymlFileStats.save(fileStats);
-								ymlFileStats.set("Version", 1.01);
+								ymlFileStats.set("Version", 1.02);
 								ymlFileStats.set("Date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 								ymlFileStats.set("Day.Yes", 0);
 								ymlFileStats.set("Day.No", 0);
@@ -645,19 +681,19 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileStats.set("MoneySpent", 0.00);
 								ymlFileStats.save(fileStats);
 							} catch (IOException e1) {
-
+								System.out.println("\u001B[31m[TimeVote] ERROR: 015 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
 							}
 						} else {
 							double version = ymlFileStats.getDouble("Version");
-							if (version < 1.01) {
+							if (version < 1.02) {
 								try {
-									ymlFileStats.set("Version", 1.01);
+									ymlFileStats.set("Version", 1.02);
 									if (version < 0.5) {
 										ymlFileStats.set("MoneySpent", 0.00);
 									}
 									ymlFileStats.save(fileStats);
 								} catch (IOException e1) {
-									
+									System.out.println("\u001B[31m[TimeVote] ERROR: 016 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
 							}
 						}
