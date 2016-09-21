@@ -61,7 +61,7 @@ public class Main extends JavaPlugin {
 
 			try {
 				ymlFileConfig.save(fileConfig);
-				ymlFileConfig.set("Version", 1.02);
+				ymlFileConfig.set("Version", 1.03);
 				ymlFileConfig.set("DayTime", 6000);
 				ymlFileConfig.set("NightTime", 18000);
 				ymlFileConfig.set("VotingTime", 35);
@@ -84,7 +84,7 @@ public class Main extends JavaPlugin {
 			double version = ymlFileConfig.getDouble("Version");
 			if (ymlFileConfig.getString("Version").equals("0.2")) {
 				try {
-					ymlFileConfig.set("Version", 1.02);
+					ymlFileConfig.set("Version", 1.03);
 					ymlFileConfig.set("UseScoreboard", true);
 					ymlFileConfig.set("UseVoteGUI", true);
 					ymlFileConfig.set("PrematureEnd", true);
@@ -95,9 +95,9 @@ public class Main extends JavaPlugin {
 				} catch (IOException e1) {
 					System.out.println("\u001B[31m[TimeVote] ERROR: 010 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
-			} else if (version < 1.02) {
+			} else if (version < 1.03) {
 				try {
-					ymlFileConfig.set("Version", 1.02);
+					ymlFileConfig.set("Version", 1.03);
 					if (version == 0.3) {
 						ymlFileConfig.set("PrematureEnd", true);
 					}
@@ -137,7 +137,7 @@ public class Main extends JavaPlugin {
 		if(!fileMessages.exists()) {
 			try {
 				ymlFileMessage.save(fileMessages);
-				ymlFileMessage.set("Version", 1.02);
+				ymlFileMessage.set("Version", 1.03);
 				ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 				ymlFileMessage.set("Color.1", "&6");
 				ymlFileMessage.set("Color.2", "&e");
@@ -239,14 +239,14 @@ public class Main extends JavaPlugin {
 					ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 					ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
 					ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv day\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
-					ymlFileMessage.set("Version", 1.02);
+					ymlFileMessage.set("Version", 1.03);
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
 					System.out.println("\u001B[31m[TimeVote] ERROR: 013 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
-			} else if (version < 1.02) {
+			} else if (version < 1.03) {
 				try {
-					ymlFileMessage.set("Version", 1.02);
+					ymlFileMessage.set("Version", 1.03);
 					if (version == 0.3) {
 						ymlFileMessage.set("Message.17", "All players have voted.");
 					}
@@ -352,7 +352,7 @@ public class Main extends JavaPlugin {
 		if(!fileStats.exists()){
 			try {
 				ymlFileStats.save(fileStats);
-				ymlFileStats.set("Version", 1.02);
+				ymlFileStats.set("Version", 1.03);
 				ymlFileStats.set("Date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 				ymlFileStats.set("Day.Yes", 0);
 				ymlFileStats.set("Day.No", 0);
@@ -369,9 +369,9 @@ public class Main extends JavaPlugin {
 			}
 		} else {
 			double version = ymlFileStats.getDouble("Version");
-			if (version < 1.02) {
+			if (version < 1.03) {
 				try {
-					ymlFileStats.set("Version", 1.02);
+					ymlFileStats.set("Version", 1.03);
 					if (version < 0.5) {
 						ymlFileStats.set("MoneySpent", 0.00);
 					}
@@ -391,7 +391,7 @@ public class Main extends JavaPlugin {
 					URLConnection verbindung = meineurl.openConnection();
 					final BufferedReader in = new BufferedReader(new InputStreamReader( verbindung.getInputStream()));
 
-					if (!in.readLine().equals("Version: 1.0.2")) {
+					if (!in.readLine().equals("Version: 1.0.3")) {
 						System.out.println("[TimeVote] A new update is available.");
 						updateAvailable = true;
 					}

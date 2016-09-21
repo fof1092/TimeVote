@@ -54,6 +54,8 @@ public class TimeVote {
 				}
 				updateScore();
 			}
+			
+			this.voteYes(player);
 	
 			startTimer(1, plugin.remindingTime);
 			startTimer(2, plugin.votingTime);
