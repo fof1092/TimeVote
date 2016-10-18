@@ -6,10 +6,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,6 +42,8 @@ public class Main extends JavaPlugin {
 	long timeoutPeriod;
 	boolean useScoreboard;
 	boolean useVoteGUI;
+	boolean useBossBarAPI = false;
+	boolean useTitleAPI = false;
 	boolean prematureEnd;
 	double price;
 	boolean rawMessages;
@@ -45,6 +57,14 @@ public class Main extends JavaPlugin {
 
 		if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
 			vault = true;
+		}
+		
+		if (Bukkit.getPluginManager().getPlugin("BossBarAPI") != null) {
+			useBossBarAPI = true;
+		}
+		
+		if (Bukkit.getPluginManager().getPlugin("TitleAPI") != null) {
+			useTitleAPI = true;
 		}
 
 		PluginManager pm = getServer().getPluginManager();
@@ -61,7 +81,7 @@ public class Main extends JavaPlugin {
 
 			try {
 				ymlFileConfig.save(fileConfig);
-				ymlFileConfig.set("Version", 1.03);
+				ymlFileConfig.set("Version", 1.1);
 				ymlFileConfig.set("DayTime", 6000);
 				ymlFileConfig.set("NightTime", 18000);
 				ymlFileConfig.set("VotingTime", 35);
@@ -69,6 +89,8 @@ public class Main extends JavaPlugin {
 				ymlFileConfig.set("TimeoutPeriod", 15);
 				ymlFileConfig.set("UseScoreboard", true);
 				ymlFileConfig.set("UseVoteGUI", true);
+				ymlFileConfig.set("UseBossBarAPI", true);
+				ymlFileConfig.set("UseTitleAPI", true);
 				ymlFileConfig.set("PrematureEnd", true);
 				ymlFileConfig.set("Price", 0.00);
 				ymlFileConfig.set("RawMessages", true);
@@ -84,7 +106,7 @@ public class Main extends JavaPlugin {
 			double version = ymlFileConfig.getDouble("Version");
 			if (ymlFileConfig.getString("Version").equals("0.2")) {
 				try {
-					ymlFileConfig.set("Version", 1.03);
+					ymlFileConfig.set("Version", 1.1);
 					ymlFileConfig.set("UseScoreboard", true);
 					ymlFileConfig.set("UseVoteGUI", true);
 					ymlFileConfig.set("PrematureEnd", true);
@@ -95,9 +117,8 @@ public class Main extends JavaPlugin {
 				} catch (IOException e1) {
 					System.out.println("\u001B[31m[TimeVote] ERROR: 010 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
-			} else if (version < 1.03) {
+			} else if (version < 1.1) {
 				try {
-					ymlFileConfig.set("Version", 1.03);
 					if (version == 0.3) {
 						ymlFileConfig.set("PrematureEnd", true);
 					}
@@ -111,6 +132,11 @@ public class Main extends JavaPlugin {
 					if (version < 1.02) {
 						ymlFileConfig.set("VotingInventoryMessages", true);
 					}
+					if (version < 1.03) {
+						ymlFileConfig.set("UseBossBarAPI", true);
+						ymlFileConfig.set("UseTitleAPI", true);
+					}
+					ymlFileConfig.set("Version", 1.1);
 					ymlFileConfig.save(fileConfig);
 				} catch (IOException e1) {
 					System.out.println("\u001B[31m[TimeVote] ERROR: 011 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
@@ -125,6 +151,19 @@ public class Main extends JavaPlugin {
 		timeoutPeriod = ymlFileConfig.getLong("TimeoutPeriod");
 		useScoreboard = ymlFileConfig.getBoolean("UseScoreboard");
 		useVoteGUI = ymlFileConfig.getBoolean("UseVoteGUI");
+		
+		if (useBossBarAPI) {
+			if (!ymlFileConfig.getBoolean("UseBossBarAPI")) {
+				useBossBarAPI = false;
+			}
+		}
+		
+		if (useTitleAPI) {
+			if (!ymlFileConfig.getBoolean("UseTitleAPI")) {
+				useTitleAPI = false;
+			}
+		}
+		
 		prematureEnd = ymlFileConfig.getBoolean("PrematureEnd");
 		price = ymlFileConfig.getDouble("Price");
 		rawMessages = ymlFileConfig.getBoolean("RawMessages");
@@ -137,7 +176,7 @@ public class Main extends JavaPlugin {
 		if(!fileMessages.exists()) {
 			try {
 				ymlFileMessage.save(fileMessages);
-				ymlFileMessage.set("Version", 1.03);
+				ymlFileMessage.set("Version", 1.1);
 				ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 				ymlFileMessage.set("Color.1", "&6");
 				ymlFileMessage.set("Color.2", "&e");
@@ -156,7 +195,7 @@ public class Main extends JavaPlugin {
 				ymlFileMessage.set("Message.13", "The voting is over, the time hasn't been changed.");
 				ymlFileMessage.set("Message.14", "The voting for &e[TIME]&6 time is over in &e[SECONDS]&6 seconds.");
 				ymlFileMessage.set("Message.15", "You have to wait a bit, until you can start a new voting.");
-				ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
+				ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( https://fof1092.de/Plugins/TV )&6");
 				ymlFileMessage.set("Message.17", "All players have voted.");
 				ymlFileMessage.set("Message.18", "You need &e[MONEY]$&6 more to start a voting.");
 				ymlFileMessage.set("Message.19", "You payed &e[MONEY]$&6 to start a voting.");
@@ -187,6 +226,12 @@ public class Main extends JavaPlugin {
 				ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
 				ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 				ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
+				ymlFileMessage.set("BossBarAPIMessage", "&f[&6T&eV&f] &6Voting for &e[TIME]&6 time (&e/tv yes&6 or &e/tv no&6)");
+				ymlFileMessage.set("TitleAPIMessage.Title.1", "&f[&6T&eV&f] &e[TIME]&6 time voting.");
+				ymlFileMessage.set("TitleAPIMessage.Title.2", "&f[&6T&eV&f] &e[SECONDS]&6 seconds left.");
+				ymlFileMessage.set("TitleAPIMessage.Title.3", "&f[&6T&eV&f] &6The time has been changed.");
+				ymlFileMessage.set("TitleAPIMessage.Title.4", "&f[&6T&eV&f] &6The time hasn't been changed.");
+				ymlFileMessage.set("TitleAPIMessage.SubTitle", "&6(&e/tv yes&6 or &e/tv no&6)");
 				ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv yes\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 				ymlFileMessage.save(fileMessages);
 			} catch (IOException e1) {
@@ -203,11 +248,11 @@ public class Main extends JavaPlugin {
 					ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 					ymlFileMessage.set("Color.1", "&6");
 					ymlFileMessage.set("Color.2", "&e");
-					ymlFileMessage.set("Message.3", "There is a new voting for &e[TIME]&6 time, vote with &e/tv yes�6 or &e/tv no&6.");
+					ymlFileMessage.set("Message.3", "There is a new voting for &e[TIME]&6 time, vote with &e/tv yes&6 or &e/tv no&6.");
 					ymlFileMessage.set("Message.8", "You have voted for &eYES&6.");
 					ymlFileMessage.set("Message.9", "You have voted for &eNO&6.");
 					ymlFileMessage.set("Message.14", "The voting for &e[TIME]&6 time is over in &e[SECONDS]&6 seconds.");
-					ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
+					ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( https://fof1092.de/Plugins/TV )&6");
 					ymlFileMessage.set("Message.17", "All players have voted.");
 					ymlFileMessage.set("Message.18", "You need &e[MONEY]$&6 more to start a voting.");
 					ymlFileMessage.set("Message.19", "You payed &e[MONEY]$&6 to start a voting.");
@@ -238,15 +283,20 @@ public class Main extends JavaPlugin {
 					ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
 					ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 					ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
+					ymlFileMessage.set("BossBarAPIMessage", "&f[&6T&eV&f] &6Voting for &e[TIME]&6 time (&e/tv yes&6 or &e/tv no&6)");
+					ymlFileMessage.set("TitleAPIMessage.Title.1", "&f[&6T&eV&f] &e[TIME]&6 time voting.");
+					ymlFileMessage.set("TitleAPIMessage.Title.2", "&f[&6T&eV&f] &e[SECONDS]&6 seconds left.");
+					ymlFileMessage.set("TitleAPIMessage.Title.3", "&f[&6T&eV&f] &6The time has been changed.");
+					ymlFileMessage.set("TitleAPIMessage.Title.4", "&f[&6T&eV&f] &6The time hasn't been changed.");
+					ymlFileMessage.set("TitleAPIMessage.SubTitle", "&6(&e/tv yes&6 or &e/tv no&6)");
 					ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv day\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
-					ymlFileMessage.set("Version", 1.03);
+					ymlFileMessage.set("Version", 1.1);
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
 					System.out.println("\u001B[31m[TimeVote] ERROR: 013 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
-			} else if (version < 1.03) {
+			} else if (version < 1.1) {
 				try {
-					ymlFileMessage.set("Version", 1.03);
 					if (version == 0.3) {
 						ymlFileMessage.set("Message.17", "All players have voted.");
 					}
@@ -280,7 +330,6 @@ public class Main extends JavaPlugin {
 						ymlFileMessage.set("HelpText.7", "This command allows you to vote for yes or no.");
 						ymlFileMessage.set("HelpText.8", "' '");
 						ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
-						ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
 					}
 					if (version <= 1.0) {
 						ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
@@ -289,9 +338,19 @@ public class Main extends JavaPlugin {
 					if (version < 1.02) {
 						ymlFileMessage.set("Message.23", "You changed the time to &e[TIME]&6.");
 					}
+					if (version < 1.1) {
+						ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( https://fof1092.de/Plugins/TV )&6");
+						ymlFileMessage.set("BossBarAPIMessage", "&f[&6T&eV&f] &6Voting for &e[TIME]&6 time (&e/tv yes&6 or &e/tv no&6)");
+						ymlFileMessage.set("TitleAPIMessage.Title.1", "&f[&6T&eV&f] &e[TIME]&6 time voting.");
+						ymlFileMessage.set("TitleAPIMessage.Title.2", "&f[&6T&eV&f] &e[SECONDS]&6 seconds left.");
+						ymlFileMessage.set("TitleAPIMessage.Title.3", "&f[&6T&eV&f] &6The time has been changed.");
+						ymlFileMessage.set("TitleAPIMessage.Title.4", "&f[&6T&eV&f] &6The time hasn't been changed.");
+						ymlFileMessage.set("TitleAPIMessage.SubTitle", "&6(&e/tv yes&6 or &e/tv no&6)");
+					}
+					ymlFileMessage.set("Version", 1.1);
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
-					System.out.println("\u001B[31m[TimeVote] ERROR: 014 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
+					
 				}
 			}
 		}
@@ -344,6 +403,12 @@ public class Main extends JavaPlugin {
 		msg.put("helpText.9", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.9")));
 		msg.put("votingInventoryTitle.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.1")));
 		msg.put("votingInventoryTitle.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.2")));
+		msg.put("bossBarAPIMessage", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("BossBarAPIMessage")));
+		msg.put("titleAPIMessage.Title.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.1")));
+		msg.put("titleAPIMessage.Title.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.2")));
+		msg.put("titleAPIMessage.Title.3", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.3")));
+		msg.put("titleAPIMessage.Title.4", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.4")));
+		msg.put("titleAPIMessage.SubTitle", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.SubTitle")));
 		msg.put("rmsg.1", ymlFileMessage.getString("RawMessage.1"));
 
 		File fileStats = new File("plugins/TimeVote/Stats.yml");
@@ -352,7 +417,7 @@ public class Main extends JavaPlugin {
 		if(!fileStats.exists()){
 			try {
 				ymlFileStats.save(fileStats);
-				ymlFileStats.set("Version", 1.03);
+				ymlFileStats.set("Version", 1.1);
 				ymlFileStats.set("Date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 				ymlFileStats.set("Day.Yes", 0);
 				ymlFileStats.set("Day.No", 0);
@@ -369,12 +434,12 @@ public class Main extends JavaPlugin {
 			}
 		} else {
 			double version = ymlFileStats.getDouble("Version");
-			if (version < 1.03) {
+			if (version < 1.1) {
 				try {
-					ymlFileStats.set("Version", 1.03);
 					if (version < 0.5) {
 						ymlFileStats.set("MoneySpent", 0.00);
 					}
+					ymlFileStats.set("Version", 1.1);
 					ymlFileStats.save(fileStats);
 				} catch (IOException e1) {
 					System.out.println("\u001B[31m[TimeVote] ERROR: 016 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
@@ -386,18 +451,46 @@ public class Main extends JavaPlugin {
 			@Override
 			public void run() {
 				try {
+					TrustManager[] trustAllCerts = new TrustManager[] {
+							new X509TrustManager() {
+								public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+									return null;
+								}
+								
+								public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
 
-					URL meineurl = new URL("http://fof1092.de/plugins/TimeVote.txt");
-					URLConnection verbindung = meineurl.openConnection();
-					final BufferedReader in = new BufferedReader(new InputStreamReader( verbindung.getInputStream()));
+								public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+							}
+					};
+					
+					SSLContext sslC = SSLContext.getInstance("SSL");
+					sslC.init(null, trustAllCerts, new java.security.SecureRandom());
+					
+					HttpsURLConnection.setDefaultSSLSocketFactory(sslC.getSocketFactory());
 
-					if (!in.readLine().equals("Version: 1.0.3")) {
+					HostnameVerifier allHostsValid = new HostnameVerifier() {
+						public boolean verify(String hostname, SSLSession session) {
+							return true;
+						}
+					};
+						    
+					HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+						 
+					URL url = new URL("https://fof1092.de/Plugins/TV/version.txt");
+					URLConnection connection = url.openConnection();
+					final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())); 
+					
+					if (!reader.readLine().equals("Version: 1.1")) {
 						System.out.println("[TimeVote] A new update is available.");
 						updateAvailable = true;
 					}
-
+					
 				} catch ( IOException e) {
-					System.out.println("[TimeVote] Couldn't check for updates.");
+					System.out.println("\u001B[31m[TimeVote] Couldn't check for updates. [" + e.getMessage() +"]\u001B[0m");
+				} catch (NoSuchAlgorithmException e) {
+					System.out.println("\u001B[31m[TimeVote] Couldn't check for updates. [" + e.getMessage() +"]\u001B[0m");
+				} catch (KeyManagementException e) {
+					System.out.println("\u001B[31m[TimeVote] Couldn't check for updates. [" + e.getMessage() +"]\u001B[0m");
 				}
 			}
 		}, 0L);
@@ -418,6 +511,11 @@ public class Main extends JavaPlugin {
 					if (useScoreboard) {
 						for (Player p : tv.getAllPlayersAtWorld()) {
 							tv.removeScoreboard(p.getName());
+						}
+					}
+					if (useBossBarAPI) {
+						for (Player p : tv.getAllPlayersAtWorld()) {
+							tv.removeBossBar(p.getName());
 						}
 					}
 					tv.sendMessage(msg.get("[TimeVote]") + msg.get("msg.13"));

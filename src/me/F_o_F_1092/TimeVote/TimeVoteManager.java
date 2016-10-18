@@ -29,7 +29,7 @@ public class TimeVoteManager {
 	public static Economy getVault() {
 		return Bukkit.getServer().getServicesManager().getRegistration(Economy.class).getProvider();
 	}
-
+	
 	public static boolean isVaultInUse() {
 		return plugin.vault && plugin.price > 0.00;
 	}
@@ -47,12 +47,12 @@ public class TimeVoteManager {
 				System.out.println("\u001B[31m[TimeVote] ERROR: 005 | The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
-			voteGUIItemOne = new ItemStack(Material.WOOL, 1, (byte)4);
+			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)4);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
 			voteGUIItemOneMeta.setDisplayName("§e" + plugin.msg.get("text.1").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
-			voteGUIItemTwo = new ItemStack(Material.WOOL, 1, (byte)11);
+			voteGUIItemTwo = new ItemStack(Material.STAINED_CLAY, 1, (byte)11);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
 			voteGUIItemTwoMeta.setDisplayName("§9" + plugin.msg.get("text.2").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
@@ -67,20 +67,33 @@ public class TimeVoteManager {
 				System.out.println("\u001B[31m[TimeVote] ERROR: 006 | The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
-			voteGUIItemOne = new ItemStack(Material.WOOL, 1, (byte)5);
+			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)5);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
 			voteGUIItemOneMeta.setDisplayName("§a" + plugin.msg.get("text.3").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
-			voteGUIItemTwo = new ItemStack(Material.WOOL, 1, (byte)14);
+			voteGUIItemTwo = new ItemStack(Material.STAINED_CLAY, 1, (byte)14);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
 			voteGUIItemTwoMeta.setDisplayName("§c" + plugin.msg.get("text.4").replace(plugin.msg.get("color.2"), ""));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
 		}
 
+		ItemStack blockedItem = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte)0);
+		ItemMeta blockedItemMeta = voteGUIItemOne.getItemMeta();
+		blockedItemMeta.setDisplayName("");
+		blockedItem.setItemMeta(blockedItemMeta);
+		
+		
+		voteGUI.setItem(0, blockedItem);
+		voteGUI.setItem(1, voteGUIItemOne);
+		voteGUI.setItem(2, voteGUIItemOne);
 		voteGUI.setItem(3, voteGUIItemOne);
+		voteGUI.setItem(4, blockedItem);
 		voteGUI.setItem(5, voteGUIItemTwo);
-
+		voteGUI.setItem(6, voteGUIItemTwo);
+		voteGUI.setItem(7, voteGUIItemTwo);
+		voteGUI.setItem(8, blockedItem);
+		
 		plugin.votingGUI.put(player, worldName);
 
 		Bukkit.getPlayer(player).openInventory(voteGUI);

@@ -9,6 +9,12 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.inventivetalent.bossbar.BossBar;
+import org.inventivetalent.bossbar.BossBarAPI;
+
+import com.connorlinfoot.titleapi.TitleAPI;
+
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class TimeVote {
 
@@ -25,6 +31,7 @@ public class TimeVote {
 	boolean timeoutPeriod;
 	double moneySpend;
 	boolean onePlayerVoteing = false;
+	BossBar bossBar;
 	
 	TimeVote(String worldName, String player, String time, double moneySpend) {
 		if (plugin.useVoteGUI) {
@@ -53,6 +60,37 @@ public class TimeVote {
 					setScoreboard(p.getName());
 				}
 				updateScore();
+			}
+			
+			if (plugin.useBossBarAPI) {
+				String timeString = plugin.msg.get("bossBarAPIMessage");
+				if (getTime().equals("Day")) {
+					timeString = timeString.replace("[TIME]", plugin.msg.get("text.1"));
+				} else {
+					timeString = timeString.replace("[TIME]", plugin.msg.get("text.2"));
+				}
+				
+				bossBar = BossBarAPI.addBar(getAllPlayersAtWorld(),
+					      new TextComponent(timeString),
+					      BossBarAPI.Color.YELLOW,
+					      BossBarAPI.Style.NOTCHED_20,
+					      1.0f,
+					      20,
+					      plugin.votingTime);
+					 
+			}
+			
+			if (plugin.useTitleAPI) {
+				for (Player p : getAllPlayersAtWorld()) {
+					String timeString = plugin.msg.get("titleAPIMessage.Title.1");
+					if (getTime().equals("Day")) {
+						timeString = timeString.replace("[TIME]", plugin.msg.get("text.1"));
+					} else {
+						timeString = timeString.replace("[TIME]", plugin.msg.get("text.2"));
+					}
+					
+					TitleAPI.sendTitle(p, 10, 60, 10, timeString, plugin.msg.get("titleAPIMessage.SubTitle"));
+				}
 			}
 			
 			this.voteYes(player);
@@ -95,6 +133,14 @@ public class TimeVote {
 		}
 	}
 
+	void setBossBar(String player) {
+		bossBar.addPlayer(Bukkit.getPlayer(player));
+	}
+	
+	void removeBossBar(String player) {
+		bossBar.removePlayer(Bukkit.getPlayer(player));
+	}
+	
 	void updateScore() {
 		for (Player p : getAllPlayersAtWorld()) {
 			Objective objective = Bukkit.getPlayer(p.getName()).getScoreboard().getObjective("TimeVote");
@@ -156,6 +202,15 @@ public class TimeVote {
 
 						sendMessage(plugin.msg.get("[TimeVote]") + text);
 
+						if (plugin.useTitleAPI) {
+							for (Player p : getAllPlayersAtWorld()) {
+								String secondsLeftString = plugin.msg.get("titleAPIMessage.Title.2");
+								secondsLeftString = secondsLeftString.replace("[SECONDS]", (plugin.votingTime - plugin.remindingTime) + "");
+								
+								TitleAPI.sendTitle(p, 10, 60, 10, secondsLeftString, plugin.msg.get("titleAPIMessage.SubTitle"));
+							}
+						}
+						
 						task1 = null;
 					}
 				}, remindingTime * 20L);
@@ -198,6 +253,25 @@ public class TimeVote {
 						}
 					}
 
+					if (plugin.useBossBarAPI) {
+						for (Player p : getAllPlayersAtWorld()) {
+							removeBossBar(p.getName());
+						}
+					}
+					
+					if (plugin.useTitleAPI) {
+						for (Player p : getAllPlayersAtWorld()) {
+							String endingString;
+							if (yes > no) {
+								endingString = plugin.msg.get("titleAPIMessage.Title.3");
+							} else {
+								endingString = plugin.msg.get("titleAPIMessage.Title.4");
+							}
+							
+							TitleAPI.sendTitle(p, 10, 60, 10, endingString, null);
+						}
+					}
+					
 					if (plugin.useVoteGUI) {
 						if (!plugin.votingGUI.isEmpty()) {
 							TimeVoteManager.closeAllVoteingGUIs(worldName);

@@ -90,9 +90,9 @@ public class CommnandTimeVote implements CommandExecutor {
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					cs.sendMessage("§6-----§f[§6Time§eVote§f]§6-----");
-					cs.sendMessage("§6Version: §e1.0.3");
+					cs.sendMessage("§6Version: §e1.1");
 					cs.sendMessage("§6By: §eF_o_F_1092");
-					cs.sendMessage("§6TimeVote: §ehttp://fof1092.de/TV");
+					cs.sendMessage("§6TimeVote: §ehttps://fof1092.de/Plugins/TV");
 				}
 			} else if (args[0].equalsIgnoreCase("stats")) {
 				if (args.length != 1) {
@@ -356,6 +356,12 @@ public class CommnandTimeVote implements CommandExecutor {
 											tv.removeScoreboard(p.getName());
 										}
 										
+										if (plugin.useBossBarAPI) {
+											for (Player p : tv.getAllPlayersAtWorld()) {
+												tv.removeBossBar(p.getName());
+											}
+										}
+										
 										tv.cancelTimer(1);
 										tv.cancelTimer(2);
 										tv.cancelTimer(3);
@@ -377,7 +383,7 @@ public class CommnandTimeVote implements CommandExecutor {
 
 							try {
 								ymlFileConfig.save(fileConfig);
-								ymlFileConfig.set("Version", 1.03);
+								ymlFileConfig.set("Version", 1.1);
 								ymlFileConfig.set("DayTime", 6000);
 								ymlFileConfig.set("NightTime", 18000);
 								ymlFileConfig.set("VotingTime", 35);
@@ -385,6 +391,8 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileConfig.set("TimeoutPeriod", 15);
 								ymlFileConfig.set("UseScoreboard", true);
 								ymlFileConfig.set("UseVoteGUI", true);
+								ymlFileConfig.set("UseBossBarAPI", true);
+								ymlFileConfig.set("UseTitleAPI", true);
 								ymlFileConfig.set("PrematureEnd", true);
 								ymlFileConfig.set("Price", 0.00);
 								ymlFileConfig.set("RawMessages", true);
@@ -400,7 +408,7 @@ public class CommnandTimeVote implements CommandExecutor {
 							double version = ymlFileConfig.getDouble("Version");
 							if (ymlFileConfig.getString("Version").equals("0.2")) {
 								try {
-									ymlFileConfig.set("Version", 1.03);
+									ymlFileConfig.set("Version", 1.1);
 									ymlFileConfig.set("UseScoreboard", true);
 									ymlFileConfig.set("UseVoteGUI", true);
 									ymlFileConfig.set("PrematureEnd", true);
@@ -411,9 +419,8 @@ public class CommnandTimeVote implements CommandExecutor {
 								} catch (IOException e1) {
 									System.out.println("\u001B[31m[TimeVote] ERROR: 010 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
-							} else if (version < 1.03) {
+							} else if (version < 1.1) {
 								try {
-									ymlFileConfig.set("Version", 1.03);
 									if (version == 0.3) {
 										ymlFileConfig.set("PrematureEnd", true);
 									}
@@ -427,6 +434,11 @@ public class CommnandTimeVote implements CommandExecutor {
 									if (version < 1.02) {
 										ymlFileConfig.set("VotingInventoryMessages", true);
 									}
+									if (version < 1.03) {
+										ymlFileConfig.set("UseBossBarAPI", true);
+										ymlFileConfig.set("UseTitleAPI", true);
+									}
+									ymlFileConfig.set("Version", 1.1);
 									ymlFileConfig.save(fileConfig);
 								} catch (IOException e1) {
 									System.out.println("\u001B[31m[TimeVote] ERROR: 011 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
@@ -453,7 +465,7 @@ public class CommnandTimeVote implements CommandExecutor {
 						if(!fileMessages.exists()) {
 							try {
 								ymlFileMessage.save(fileMessages);
-								ymlFileMessage.set("Version", 1.03);
+								ymlFileMessage.set("Version", 1.1);
 								ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 								ymlFileMessage.set("Color.1", "&6");
 								ymlFileMessage.set("Color.2", "&e");
@@ -472,7 +484,7 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileMessage.set("Message.13", "The voting is over, the time hasn't been changed.");
 								ymlFileMessage.set("Message.14", "The voting for &e[TIME]&6 time is over in &e[SECONDS]&6 seconds.");
 								ymlFileMessage.set("Message.15", "You have to wait a bit, until you can start a new voting.");
-								ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
+								ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( https://fof1092.de/Plugins/TV )&6");
 								ymlFileMessage.set("Message.17", "All players have voted.");
 								ymlFileMessage.set("Message.18", "You need &e[MONEY]$&6 more to start a voting.");
 								ymlFileMessage.set("Message.19", "You payed &e[MONEY]$&6 to start a voting.");
@@ -503,6 +515,12 @@ public class CommnandTimeVote implements CommandExecutor {
 								ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
 								ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 								ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
+								ymlFileMessage.set("BossBarAPIMessage", "&f[&6T&eV&f] &6Voting for &e[TIME]&6 time (&e/tv yes&6 or &e/tv no&6)");
+								ymlFileMessage.set("TitleAPIMessage.Title.1", "&f[&6T&eV&f] &e[TIME]&6 time voting.");
+								ymlFileMessage.set("TitleAPIMessage.Title.2", "&f[&6T&eV&f] &e[SECONDS]&6 seconds left.");
+								ymlFileMessage.set("TitleAPIMessage.Title.3", "&f[&6T&eV&f] &6The time has been changed.");
+								ymlFileMessage.set("TitleAPIMessage.Title.4", "&f[&6T&eV&f] &6The time hasn't been changed.");
+								ymlFileMessage.set("TitleAPIMessage.SubTitle", "&6(&e/tv yes&6 or &e/tv no&6)");
 								ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv yes\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 								ymlFileMessage.save(fileMessages);
 							} catch (IOException e1) {
@@ -519,11 +537,11 @@ public class CommnandTimeVote implements CommandExecutor {
 									ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 									ymlFileMessage.set("Color.1", "&6");
 									ymlFileMessage.set("Color.2", "&e");
-									ymlFileMessage.set("Message.3", "There is a new voting for &e[TIME]&6 time, vote with &e/tv yes�6 or &e/tv no&6.");
+									ymlFileMessage.set("Message.3", "There is a new voting for &e[TIME]&6 time, vote with &e/tv yes&6 or &e/tv no&6.");
 									ymlFileMessage.set("Message.8", "You have voted for &eYES&6.");
 									ymlFileMessage.set("Message.9", "You have voted for &eNO&6.");
 									ymlFileMessage.set("Message.14", "The voting for &e[TIME]&6 time is over in &e[SECONDS]&6 seconds.");
-									ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
+									ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( https://fof1092.de/Plugins/TV )&6");
 									ymlFileMessage.set("Message.17", "All players have voted.");
 									ymlFileMessage.set("Message.18", "You need &e[MONEY]$&6 more to start a voting.");
 									ymlFileMessage.set("Message.19", "You payed &e[MONEY]$&6 to start a voting.");
@@ -554,15 +572,20 @@ public class CommnandTimeVote implements CommandExecutor {
 									ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
 									ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
 									ymlFileMessage.set("VotingInventoryTitle.2", "&f[&6T&eV&f] &e[TIME]&6");
+									ymlFileMessage.set("BossBarAPIMessage", "&f[&6T&eV&f] &6Voting for &e[TIME]&6 time (&e/tv yes&6 or &e/tv no&6)");
+									ymlFileMessage.set("TitleAPIMessage.Title.1", "&f[&6T&eV&f] &e[TIME]&6 time voting.");
+									ymlFileMessage.set("TitleAPIMessage.Title.2", "&f[&6T&eV&f] &e[SECONDS]&6 seconds left.");
+									ymlFileMessage.set("TitleAPIMessage.Title.3", "&f[&6T&eV&f] &6The time has been changed.");
+									ymlFileMessage.set("TitleAPIMessage.Title.4", "&f[&6T&eV&f] &6The time hasn't been changed.");
+									ymlFileMessage.set("TitleAPIMessage.SubTitle", "&6(&e/tv yes&6 or &e/tv no&6)");
 									ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv day\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
-									ymlFileMessage.set("Version", 1.03);
+									ymlFileMessage.set("Version", 1.1);
 									ymlFileMessage.save(fileMessages);
 								} catch (IOException e1) {
 									System.out.println("\u001B[31m[TimeVote] ERROR: 013 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 								}
-							} else if (version < 1.03) {
+							} else if (version < 1.1) {
 								try {
-									ymlFileMessage.set("Version", 1.03);
 									if (version == 0.3) {
 										ymlFileMessage.set("Message.17", "All players have voted.");
 									}
@@ -596,7 +619,6 @@ public class CommnandTimeVote implements CommandExecutor {
 										ymlFileMessage.set("HelpText.7", "This command allows you to vote for yes or no.");
 										ymlFileMessage.set("HelpText.8", "' '");
 										ymlFileMessage.set("HelpText.9", "This command is reloading the Config.yml and Messages.yml file.");
-										ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( http://fof1092.de/TV )&6");
 									}
 									if (version <= 1.0) {
 										ymlFileMessage.set("VotingInventoryTitle.1", "&f[&6T&eV&f] &eDay&f/&eNight");
@@ -605,9 +627,19 @@ public class CommnandTimeVote implements CommandExecutor {
 									if (version < 1.02) {
 										ymlFileMessage.set("Message.23", "You changed the time to &e[TIME]&6.");
 									}
+									if (version < 1.1) {
+										ymlFileMessage.set("Message.16", "There is a new update available for this plugin. &e( https://fof1092.de/Plugins/TV )&6");
+										ymlFileMessage.set("BossBarAPIMessage", "&f[&6T&eV&f] &6Voting for &e[TIME]&6 time (&e/tv yes&6 or &e/tv no&6)");
+										ymlFileMessage.set("TitleAPIMessage.Title.1", "&f[&6T&eV&f] &e[TIME]&6 time voting.");
+										ymlFileMessage.set("TitleAPIMessage.Title.2", "&f[&6T&eV&f] &e[SECONDS]&6 seconds left.");
+										ymlFileMessage.set("TitleAPIMessage.Title.3", "&f[&6T&eV&f] &6The time has been changed.");
+										ymlFileMessage.set("TitleAPIMessage.Title.4", "&f[&6T&eV&f] &6The time hasn't been changed.");
+										ymlFileMessage.set("TitleAPIMessage.SubTitle", "&6(&e/tv yes&6 or &e/tv no&6)");
+									}
+									ymlFileMessage.set("Version", 1.1);
 									ymlFileMessage.save(fileMessages);
 								} catch (IOException e1) {
-									System.out.println("\u001B[31m[TimeVote] ERROR: 014 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
+									
 								}
 							}
 						}
@@ -660,6 +692,12 @@ public class CommnandTimeVote implements CommandExecutor {
 						plugin.msg.put("helpText.9", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.9")));
 						plugin.msg.put("votingInventoryTitle.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.1")));
 						plugin.msg.put("votingInventoryTitle.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.2")));
+						plugin.msg.put("bossBarAPIMessage", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("BossBarAPIMessage")));
+						plugin.msg.put("titleAPIMessage.Title.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.1")));
+						plugin.msg.put("titleAPIMessage.Title.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.2")));
+						plugin.msg.put("titleAPIMessage.Title.3", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.3")));
+						plugin.msg.put("titleAPIMessage.Title.4", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.Title.4")));
+						plugin.msg.put("titleAPIMessage.SubTitle", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("TitleAPIMessage.SubTitle")));
 						plugin.msg.put("rmsg.1", ymlFileMessage.getString("RawMessage.1"));
 
 						File fileStats = new File("plugins/TimeVote/Stats.yml");
@@ -668,7 +706,7 @@ public class CommnandTimeVote implements CommandExecutor {
 						if(!fileStats.exists()){
 							try {
 								ymlFileStats.save(fileStats);
-								ymlFileStats.set("Version", 1.03);
+								ymlFileStats.set("Version", 1.1);
 								ymlFileStats.set("Date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 								ymlFileStats.set("Day.Yes", 0);
 								ymlFileStats.set("Day.No", 0);
@@ -685,12 +723,12 @@ public class CommnandTimeVote implements CommandExecutor {
 							}
 						} else {
 							double version = ymlFileStats.getDouble("Version");
-							if (version < 1.03) {
+							if (version < 1.1) {
 								try {
-									ymlFileStats.set("Version", 1.03);
 									if (version < 0.5) {
 										ymlFileStats.set("MoneySpent", 0.00);
 									}
+									ymlFileStats.set("Version", 1.1);
 									ymlFileStats.save(fileStats);
 								} catch (IOException e1) {
 									System.out.println("\u001B[31m[TimeVote] ERROR: 016 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");

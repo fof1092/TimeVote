@@ -50,6 +50,10 @@ public class EventListener implements Listener {
 						}
 					}, 1L);
 				}
+				
+				if (plugin.useBossBarAPI) {
+					tv.setBossBar(p.getName());
+				}
 			}
 		}
 	}
@@ -67,6 +71,10 @@ public class EventListener implements Listener {
 			if (!tv.isTimeoutPeriod()) {
 				if (plugin.useScoreboard) {
 					tv.removeScoreboard(p.getName());
+				}
+				
+				if (plugin.useBossBarAPI) {
+					tv.removeBossBar(p.getName());
 				}
 				
 				if (plugin.prematureEnd) {
@@ -91,6 +99,10 @@ public class EventListener implements Listener {
 			if (!tv.isTimeoutPeriod()) {
 				if (plugin.useScoreboard) {
 					tv.removeScoreboard(p.getName());
+				}
+				
+				if (plugin.useBossBarAPI) {
+					tv.removeBossBar(p.getName());
 				}
 				
 				if (plugin.prematureEnd) {
@@ -118,6 +130,10 @@ public class EventListener implements Listener {
 						tv.removeScoreboard(p.getName());
 					}
 					
+					if (plugin.useBossBarAPI) {
+						tv.removeBossBar(p.getName());
+					}
+					
 					if (plugin.prematureEnd) {
 						if (tv.checkPrematureEnd()) {
 							tv.prematureEnd();
@@ -141,6 +157,10 @@ public class EventListener implements Listener {
 						TimeVoteManager.getVotingAtWorld(p.getWorld().getName()).setScoreboard(p.getName());
 						TimeVoteManager.getVotingAtWorld(p.getWorld().getName()).updateScore();
 					}
+					
+					if (plugin.useBossBarAPI) {
+						tv.setBossBar(p.getName());
+					}
 				}
 			}
 		}
@@ -162,15 +182,15 @@ public class EventListener implements Listener {
 			if (e.getRawSlot() == e.getSlot()) {
 				e.setCancelled(true);
 				if (!TimeVoteManager.isVotingAtWorld(p.getWorld().getName())) {
-					if (e.getSlot() == 3) {
+					if (e.getSlot() >= 1 && e.getSlot() <= 3) {
 						p.chat("/tv day");
-					} else if (e.getSlot() == 5) {
+					} else if (e.getSlot() >= 5 && e.getSlot() <= 7) {
 						p.chat("/tv night");
 					}
 				} else {
-					if (e.getSlot() == 3) {
+					if (e.getSlot() >= 1 && e.getSlot() <= 3) {
 						p.chat("/tv yes");
-					} else if (e.getSlot() == 5) {
+					} else if (e.getSlot() >= 5 && e.getSlot() <= 7) {
 						p.chat("/tv no");
 					}
 					TimeVoteManager.closeVoteingGUI(p.getName(), true);
