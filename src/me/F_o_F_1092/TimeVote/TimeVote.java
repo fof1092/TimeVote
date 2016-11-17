@@ -48,7 +48,7 @@ public class TimeVote {
 		timeoutPeriod = false;
 		this.moneySpend = moneySpend;
 
-		if (getAllPlayersAtWorld().size() == 1) {
+		if (getAllPlayersAtWorld().size() == 1 || plugin.checkForHiddenPlayers && getAllPlayersAtWorld().size() - getNumberOfHiddenPlayers() <= 1) {
 			this.onePlayerVoteing = true;
 			
 			this.voteYes(player);
@@ -312,7 +312,7 @@ public class TimeVote {
 
 	boolean checkPrematureEnd() {
 		for (Player p : getAllPlayersAtWorld()) {
-			if (!players.contains(p.getName())) {
+			if (!players.contains(p.getName()) && !plugin.checkForHiddenPlayers ||!players.contains(p.getName()) && plugin.checkForHiddenPlayers && !isHidden(p)) {
 				return false;
 			}
 		}
@@ -395,6 +395,39 @@ public class TimeVote {
 	void sendRawMessage(String message) {
 		for (Player p : getAllPlayersAtWorld()) {
 			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + p.getName() + " " + message);
+		}
+	}
+	
+	int getNumberOfHiddenPlayers() {
+		int hiddenPlayers1 = 0;
+		for (Player p1 : getAllPlayersAtWorld()) {
+			int hiddenPlayers2 = 0;
+			for (Player p2 : getAllPlayersAtWorld()) {
+				if (!p2.canSee(p1)) {
+					hiddenPlayers2++;
+				}
+			}
+			
+			if (hiddenPlayers2 >= getAllPlayersAtWorld().size() / 2) {
+				hiddenPlayers1++;
+			}
+		}
+		return hiddenPlayers1;
+	}
+	
+	boolean isHidden(Player p1) {
+		int hiddenPlayers2 = 0;
+		
+		for (Player p2 : getAllPlayersAtWorld()) {
+			if (!p2.canSee(p1)) {
+				hiddenPlayers2++;
+			}
+		}
+		
+		if (hiddenPlayers2 >= getAllPlayersAtWorld().size() / 2) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

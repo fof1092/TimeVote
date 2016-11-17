@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import me.F_o_F_1092.TimeVote.PluginManager.HelpMessage;
 import me.F_o_F_1092.TimeVote.PluginManager.HelpPageListener;
+import me.F_o_F_1092.TimeVote.PluginManager.UpdateListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,7 @@ public class CommnandTimeVote implements CommandExecutor {
 		if (args.length == 0) {
 			if (!(cs instanceof Player) || !plugin.useVoteGUI) {
 				String replaceCommand = plugin.msg.get("msg.22");
-				replaceCommand = replaceCommand.replace("[COMMAND]", "/tv help " + plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2") + "Page" + plugin.msg.get("color.1") + ")");
+				replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
 				cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 			} else {
 				Player p = (Player)cs;
@@ -62,13 +63,13 @@ public class CommnandTimeVote implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("help")) {
 				if (!(args.length >= 1 && args.length <= 2)) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv help " + plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2") + "Page" + plugin.msg.get("color.1") + ")");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
 						if (args.length != 1) {
 							String replaceCommand = plugin.msg.get("msg.22");
-							replaceCommand = replaceCommand.replace("[COMMAND]", "/tv help");
+							replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
 							cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 						} else {
 							HelpPageListener.sendNormalMessage(cs);
@@ -80,12 +81,12 @@ public class CommnandTimeVote implements CommandExecutor {
 						} else {
 							if (!HelpPageListener.isNumber(args[1])) {
 								String replaceCommand = plugin.msg.get("msg.22");
-								replaceCommand = replaceCommand.replace("[COMMAND]", "/tv help " + plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2") + "Page" + plugin.msg.get("color.1") + ")");
+								replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
 								cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 							} else {
 								if (Integer.parseInt(args[1]) <= 0 || Integer.parseInt(args[1]) > HelpPageListener.getMaxPlayerPages(p)) {
 									String replaceCommand = plugin.msg.get("msg.22");
-									replaceCommand = replaceCommand.replace("[COMMAND]", "/tv help " + plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2") + "Page" + plugin.msg.get("color.1") + ")");
+									replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
 									cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 								} else {
 									HelpPageListener.sendMessage(p, Integer.parseInt(args[1]) - 1);
@@ -97,18 +98,18 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("info")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv info");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv info"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
-					cs.sendMessage("Â§6-----Â§f[Â§6TimeÂ§eVoteÂ§f]Â§6-----");
-					cs.sendMessage("Â§6Version: Â§e1.1.1");
-					cs.sendMessage("Â§6By: Â§eF_o_F_1092");
-					cs.sendMessage("Â§6TimeVote: Â§ehttps://fof1092.de/Plugins/TV");
+					cs.sendMessage("§6-----§f[§6Time§eVote§f]§6-----");
+					cs.sendMessage("§6Version: §e" + UpdateListener.getUpdateStringVersion());
+					cs.sendMessage("§6By: §eF_o_F_1092");
+					cs.sendMessage("§6TimeVote: §ehttps://fof1092.de/Plugins/TV");
 				}
 			} else if (args[0].equalsIgnoreCase("stats")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv stats");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv stats"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					TimeVoteStats tvs = new TimeVoteStats();
@@ -130,7 +131,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("day")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv day");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv day"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -180,7 +181,7 @@ public class CommnandTimeVote implements CommandExecutor {
 										}
 									}
 									if (tv != null) {
-										if (tv.getAllPlayersAtWorld().size() == 1) {
+										if (tv.getAllPlayersAtWorld().size() == 1 || plugin.checkForHiddenPlayers && tv.getAllPlayersAtWorld().size() - tv.getNumberOfHiddenPlayers() <= 1) {
 											String text = plugin.msg.get("msg.23");
 											text = text.replace("[TIME]", plugin.msg.get("text.1"));
 											p.sendMessage(plugin.msg.get("[TimeVote]") + text);
@@ -205,7 +206,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("night")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv night");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv night"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -255,7 +256,7 @@ public class CommnandTimeVote implements CommandExecutor {
 										}
 									}
 									if (tv != null) {
-										if (tv.getAllPlayersAtWorld().size() == 1) {
+										if (tv.getAllPlayersAtWorld().size() == 1 || plugin.checkForHiddenPlayers && tv.getAllPlayersAtWorld().size() - tv.getNumberOfHiddenPlayers() <= 1) {
 											String text = plugin.msg.get("msg.23");
 											text = text.replace("[TIME]", plugin.msg.get("text.2"));
 											p.sendMessage(plugin.msg.get("[TimeVote]") + text);
@@ -280,7 +281,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("yes")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv yes");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv yes"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -312,7 +313,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("no")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv no");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv no"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -344,7 +345,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("reload")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", "/tv reload");
+					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv reload"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!cs.hasPermission("TimeVote.Reload")) {
@@ -394,7 +395,7 @@ public class CommnandTimeVote implements CommandExecutor {
 
 							try {
 								ymlFileConfig.save(fileConfig);
-								ymlFileConfig.set("Version", 1.11);
+								ymlFileConfig.set("Version", UpdateListener.getUpdateDoubleVersion());
 								ymlFileConfig.set("DayTime", 6000);
 								ymlFileConfig.set("NightTime", 18000);
 								ymlFileConfig.set("VotingTime", 35);
@@ -436,7 +437,7 @@ public class CommnandTimeVote implements CommandExecutor {
 						if(!fileMessages.exists()) {
 							try {
 								ymlFileMessage.save(fileMessages);
-								ymlFileMessage.set("Version", 1.11);
+								ymlFileMessage.set("Version", UpdateListener.getUpdateDoubleVersion());
 								ymlFileMessage.set("[TimeVote]", "&f[&6Time&eVote&f] ");
 								ymlFileMessage.set("Color.1", "&6");
 								ymlFileMessage.set("Color.2", "&e");
@@ -584,7 +585,7 @@ public class CommnandTimeVote implements CommandExecutor {
 						if(!fileStats.exists()){
 							try {
 								ymlFileStats.save(fileStats);
-								ymlFileStats.set("Version", 1.11);
+								ymlFileStats.set("Version", UpdateListener.getUpdateDoubleVersion());
 								ymlFileStats.set("Date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 								ymlFileStats.set("Day.Yes", 0);
 								ymlFileStats.set("Day.No", 0);
@@ -606,7 +607,7 @@ public class CommnandTimeVote implements CommandExecutor {
 				}
 			} else {
 				String replaceCommand = plugin.msg.get("msg.22");
-				replaceCommand = replaceCommand.replace("[COMMAND]", "/tv help " + plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2") + "Page" + plugin.msg.get("color.1") + ")");
+				replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
 				cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 			}
 		}

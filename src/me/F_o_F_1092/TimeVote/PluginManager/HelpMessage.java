@@ -32,12 +32,16 @@ public class HelpMessage {
 		}
 	}
 	
-	private String getColoredCommand() {
+	String getColoredCommand() {
 		return plugin.msg.get("color.1") + command.replace("[", plugin.msg.get("color.1") + "[" + plugin.msg.get("color.2")).replace("(", plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2")).replace("]", plugin.msg.get("color.1") + "]" + plugin.msg.get("color.2")).replace(")", plugin.msg.get("color.1") + ")" + plugin.msg.get("color.2")).replace("|", plugin.msg.get("color.1") + "|" + plugin.msg.get("color.2"));
 	}
 	
 	void setJsonString() {
 		this.jsonMessage = "[\"\",{\"text\":\"" + getColoredCommand() + "\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + this.command + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.1") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.2") + " ❱ \"},{\"text\":\"" + getShortHelpMessage() + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + this.helpMessage + "\"}]}}}]";
+	}
+	
+	String getCommand() {
+		return this.command;
 	}
 	
 	String getJsonString() {

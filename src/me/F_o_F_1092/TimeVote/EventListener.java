@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import me.F_o_F_1092.TimeVote.PluginManager.UpdateListener;
+
 public class EventListener implements Listener {
 
 	private Main plugin;
@@ -23,7 +25,7 @@ public class EventListener implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
 
-		if (plugin.updateAvailable) {
+		if (UpdateListener.isAnewUpdateAvailable()) {
 			if (p.hasPermission("TimeVote.UpdateMessage")) {
 				p.sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.16"));
 			}
