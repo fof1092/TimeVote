@@ -30,7 +30,7 @@ public class TimeVote {
 	Integer task3;
 	boolean timeoutPeriod;
 	double moneySpend;
-	boolean onePlayerVoteing = false;
+	boolean onePlayerVoting = false;
 	BossBar bossBar;
 	
 	TimeVote(String worldName, String player, String time, double moneySpend) {
@@ -49,7 +49,7 @@ public class TimeVote {
 		this.moneySpend = moneySpend;
 
 		if (getAllPlayersAtWorld().size() == 1 || plugin.checkForHiddenPlayers && getAllPlayersAtWorld().size() - getNumberOfHiddenPlayers() <= 1) {
-			this.onePlayerVoteing = true;
+			this.onePlayerVoting = true;
 			
 			this.voteYes(player);
 			
@@ -69,7 +69,7 @@ public class TimeVote {
 				} else {
 					timeString = timeString.replace("[TIME]", plugin.msg.get("text.2"));
 				}
-				
+
 				bossBar = BossBarAPI.addBar(getAllPlayersAtWorld(),
 					      new TextComponent(timeString),
 					      BossBarAPI.Color.YELLOW,
@@ -224,7 +224,7 @@ public class TimeVote {
 					TimeVoteStats tvs = new TimeVoteStats();
 
 					if (yes > no) {
-						if (!onePlayerVoteing) {
+						if (!onePlayerVoting) {
 							sendMessage(plugin.msg.get("[TimeVote]") + plugin.msg.get("msg.12"));
 						}
 						
@@ -245,7 +245,7 @@ public class TimeVote {
 						}
 					}
 					
-					if (!onePlayerVoteing) {
+					if (!onePlayerVoting) {
 						if (plugin.useScoreboard) {
 							for (Player p : getAllPlayersAtWorld()) {
 								removeScoreboard(p.getName());
@@ -334,7 +334,7 @@ public class TimeVote {
 		this.players.add(player);
 		this.yes++;
 
-		if (!this.onePlayerVoteing) {
+		if (!this.onePlayerVoting) {
 			if (plugin.useScoreboard) {
 				updateScore();
 			}
@@ -351,7 +351,7 @@ public class TimeVote {
 		this.players.add(player);
 		this.no++;
 
-		if (!this.onePlayerVoteing) {
+		if (!this.onePlayerVoting) {
 			if (plugin.useScoreboard) {
 				updateScore();
 			}

@@ -61,7 +61,7 @@ public class Main extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EventListener(this), this);
 
-		this.getCommand("TimeVote").setExecutor(new CommnandTimeVote(this));
+		this.getCommand("TimeVote").setExecutor(new CommandTimeVote(this));
 
 		File fileConfig = new File("plugins/TimeVote/Config.yml");
 		FileConfiguration ymlFileConfig = YamlConfiguration.loadConfiguration(fileConfig);

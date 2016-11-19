@@ -1,0 +1,14 @@
+name: TimeVote
+version: ${project.version}
+description: A powerful voting plugin for day- and nighttime within worlds
+author: F_o_F_1092
+website: https://www.spigotmc.org/resources/timevote.7312/
+
+main: me.F_o_F_1092.TimeVote.Main
+database: false
+
+commands:
+  TimeVote:
+    description: TimeVote commands
+    usage: /TimeVote
+    aliases: [tv]

@@ -60,35 +60,35 @@ public class HelpPageListener {
 	}
 	
 	public static void sendNormalMessage(CommandSender cs) {
-		cs.sendMessage(plugin.msg.get("color.1") + "§m----------------§r " + pluginNametag + plugin.msg.get("color.1") + "§m----------------");
+		cs.sendMessage(plugin.msg.get("color.1") + "Â§m----------------Â§r " + pluginNametag + plugin.msg.get("color.1") + "Â§m----------------");
 		cs.sendMessage("");
 		for (HelpMessage helpMessage : helpMessages) {
 			cs.sendMessage(helpMessage.getNormalString());
 		}
 		cs.sendMessage("");
-		cs.sendMessage(plugin.msg.get("color.1") + "§m----------------§r " + pluginNametag + plugin.msg.get("color.1") + "§m----------------");
+		cs.sendMessage(plugin.msg.get("color.1") + "Â§m----------------Â§r " + pluginNametag + plugin.msg.get("color.1") + "Â§m----------------");
 	}
 	
 	private static String getNavBar(List<HelpMessage> personalHelpMessages, List<HelpMessage> personalHelpPageMessages, int page) {
 		String stringHeader = "[\"\",";
 		
-		stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "§m-\"},";
+		stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "Â§m-\"},";
 		
 		if (page != 0) {
-			stringHeader += "{\"text\":\"" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + "<" + plugin.msg.get("color.2") + "]\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + helpCommand + " " + (page) + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.3") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.1") + "-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") +"§m-\"},";
+			stringHeader += "{\"text\":\"" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + "<" + plugin.msg.get("color.2") + "]\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + helpCommand + " " + (page) + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.3") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.1") + "-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") +"Â§m-\"},";
 		} else {
-			stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "§m------\"},";
+			stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "Â§m------\"},";
 		}
 		
-		stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "§m---------§r " + pluginNametag.replace("§l", "") + plugin.msg.get("color.1") + "§m---------\"}";
+		stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "Â§m---------Â§r " + pluginNametag.replace("Â§l", "") + plugin.msg.get("color.1") + "Â§m---------\"}";
 		
 		if (getMaxPlayerPages(personalHelpMessages) > page + 1) {
-			stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "§m-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page + 2) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") + "§m-\"},{\"text\":\"" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + ">" + plugin.msg.get("color.2") + "]\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + helpCommand + " " + (page + 2) + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.2") + "\"}]}}}";
+			stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "Â§m-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page + 2) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") + "Â§m-\"},{\"text\":\"" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + ">" + plugin.msg.get("color.2") + "]\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + helpCommand + " " + (page + 2) + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.2") + "\"}]}}}";
 		} else {
-			stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "§m------\"}";
+			stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "Â§m------\"}";
 		}
 		
-		stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "§m-\"}";
+		stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "Â§m-\"}";
 		
 		stringHeader += "]";
 		

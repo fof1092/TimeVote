@@ -20,11 +20,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 
-public class CommnandTimeVote implements CommandExecutor {
+public class CommandTimeVote implements CommandExecutor {
 
 	private Main plugin;
 
-	public CommnandTimeVote(Main plugin) {
+	public CommandTimeVote(Main plugin) {
 		this.plugin = plugin;
 	}
 
@@ -101,10 +101,10 @@ public class CommnandTimeVote implements CommandExecutor {
 					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv info"));
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
-					cs.sendMessage("§6-----§f[§6Time§eVote§f]§6-----");
-					cs.sendMessage("§6Version: §e" + UpdateListener.getUpdateStringVersion());
-					cs.sendMessage("§6By: §eF_o_F_1092");
-					cs.sendMessage("§6TimeVote: §ehttps://fof1092.de/Plugins/TV");
+					cs.sendMessage("Â§6-----Â§f[Â§6TimeÂ§eVoteÂ§f]Â§6-----");
+					cs.sendMessage("Â§6Version: Â§e" + UpdateListener.getUpdateStringVersion());
+					cs.sendMessage("Â§6By: Â§eF_o_F_1092");
+					cs.sendMessage("Â§6TimeVote: Â§ehttps://fof1092.de/Plugins/TV");
 				}
 			} else if (args[0].equalsIgnoreCase("stats")) {
 				if (args.length != 1) {

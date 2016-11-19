@@ -1,9 +1,0 @@
-name: TimeVote
-version: 1.13
-main: me.F_o_F_1092.TimeVote.Main
-author: F_o_F_1092
-commands:
-  TimeVote:
-    description: none
-    usage: /TimeVote
-    aliases: [tv]
