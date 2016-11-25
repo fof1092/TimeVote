@@ -16,7 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.F_o_F_1092.TimeVote.PluginManager.HelpMessage;
+import me.F_o_F_1092.TimeVote.PluginManager.Command;
+import me.F_o_F_1092.TimeVote.PluginManager.CommandListener;
 import me.F_o_F_1092.TimeVote.PluginManager.HelpPageListener;
 import me.F_o_F_1092.TimeVote.PluginManager.UpdateListener;
 
@@ -61,7 +62,8 @@ public class Main extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EventListener(this), this);
 
-		this.getCommand("TimeVote").setExecutor(new CommnandTimeVote(this));
+		this.getCommand("TimeVote").setExecutor(new CommandTimeVote(this));
+		this.getCommand("TimeVote").setTabCompleter(new CommandTimeVoteTabCompleter());
 
 		File fileConfig = new File("plugins/TimeVote/Config.yml");
 		FileConfiguration ymlFileConfig = YamlConfiguration.loadConfiguration(fileConfig);
@@ -409,15 +411,6 @@ public class Main extends JavaPlugin {
 		msg.put("helpTextGui.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpTextGui.2")));
 		msg.put("helpTextGui.3", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpTextGui.3")));
 		msg.put("helpTextGui.4", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpTextGui.4")));
-		msg.put("helpText.1", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.1")));
-		msg.put("helpText.2", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.2")));
-		msg.put("helpText.3", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.3")));
-		msg.put("helpText.4", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.4")));
-		msg.put("helpText.5", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.5")));
-		msg.put("helpText.6", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.6")));
-		msg.put("helpText.7", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.7")));
-		msg.put("helpText.8", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.8")));
-		msg.put("helpText.9", ChatColor.translateAlternateColorCodes('&', msg.get("color.2") + ymlFileMessage.getString("HelpText.9")));
 		msg.put("votingInventoryTitle.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.1")));
 		msg.put("votingInventoryTitle.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.2")));
 		msg.put("bossBarAPIMessage", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("BossBarAPIMessage")));
@@ -430,17 +423,17 @@ public class Main extends JavaPlugin {
 
 		HelpPageListener.setPluginNametag(msg.get("[TimeVote]"));
 		
-		HelpPageListener.addHelpMessage(new HelpMessage(null, msg.get("helpText.1"), "/tv help (Page)"));
-		HelpPageListener.addHelpMessage(new HelpMessage(null, msg.get("helpText.2"), "/tv info"));
-		HelpPageListener.addHelpMessage(new HelpMessage(null, msg.get("helpText.3"), "/tv stats"));
+		CommandListener.addCommand(new Command("/tv help (Page)", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.1"))));
+		CommandListener.addCommand(new Command("/tv info", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.2"))));
+		CommandListener.addCommand(new Command("/tv stats", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.3"))));
 		if (useVoteGUI) {
-			HelpPageListener.addHelpMessage(new HelpMessage(null, msg.get("helpText.4"), "/tv"));
+			CommandListener.addCommand(new Command("/tv", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.4"))));
 		}
-		HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Day", msg.get("helpText.5"), "/tv day"));
-		HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Night", msg.get("helpText.6"), "/tv night"));
-		HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Vote", msg.get("helpText.7"), "/tv yes"));
-		HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Vote", msg.get("helpText.8"), "/tv no"));
-		HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Reload", msg.get("helpText.9"), "/tv reload"));
+		CommandListener.addCommand(new Command("/tv day", "TimeVote.Day", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.5"))));
+		CommandListener.addCommand(new Command("/tv night", "TimeVote.Night", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.6"))));
+		CommandListener.addCommand(new Command("/tv yes", "TimeVote.Vote", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.7"))));
+		CommandListener.addCommand(new Command("/tv no", "TimeVote.Vote", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.8"))));
+		CommandListener.addCommand(new Command("/tv reload", "TimeVote.Reload", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.9"))));
 		
 		
 		File fileStats = new File("plugins/TimeVote/Stats.yml");

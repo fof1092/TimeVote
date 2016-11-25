@@ -8,51 +8,28 @@ public class HelpMessage {
 
 	private static Main plugin = (Main)Bukkit.getPluginManager().getPlugin("TimeVote");
 	
-	String permission;
 	String helpMessage;
-	String command;
+	String jsonHelpMessage;
 	
-	String jsonMessage;
-	
-	public HelpMessage(String permission, String helpMessage, String command) {
-		this.permission = permission;
+	public HelpMessage(String commandString, String commandColloredString, String helpMessage) {
+		String shortHelpMessage;
 		
-		this.helpMessage = plugin.msg.get("color.2") + helpMessage;
-		
-		this.command = command;
-		
-		setJsonString();
-	}
-	
-	private String getShortHelpMessage() {
-		if (this.helpMessage.length() > (60 - getColoredCommand().replace(plugin.msg.get("color.2"), "").replace(plugin.msg.get("color.1"), "").length() - 3)) {
-			return this.helpMessage.substring(0, (60 - getColoredCommand().replace(plugin.msg.get("color.2"), "").replace(plugin.msg.get("color.1"), "").length() - 3)) + "...";
+		if (helpMessage.length() > (60 - commandColloredString.replace(plugin.msg.get("color.2"), "").replace(plugin.msg.get("color.1"), "").length() - 3)) {
+			shortHelpMessage = helpMessage.substring(0, (60 - commandColloredString.replace(plugin.msg.get("color.2"), "").replace(plugin.msg.get("color.1"), "").length() - 3)) + "...";
 		} else {
-			return this.helpMessage;
+			shortHelpMessage = helpMessage;
 		}
-	}
-	
-	String getColoredCommand() {
-		return plugin.msg.get("color.1") + command.replace("[", plugin.msg.get("color.1") + "[" + plugin.msg.get("color.2")).replace("(", plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2")).replace("]", plugin.msg.get("color.1") + "]" + plugin.msg.get("color.2")).replace(")", plugin.msg.get("color.1") + ")" + plugin.msg.get("color.2")).replace("|", plugin.msg.get("color.1") + "|" + plugin.msg.get("color.2"));
-	}
-	
-	void setJsonString() {
-		this.jsonMessage = "[\"\",{\"text\":\"" + getColoredCommand() + "\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + this.command + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.1") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.2") + " ❱ \"},{\"text\":\"" + getShortHelpMessage() + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + this.helpMessage + "\"}]}}}]";
-	}
-	
-	String getCommand() {
-		return this.command;
+		
+		this.jsonHelpMessage = "[\"\",{\"text\":\"" + commandColloredString + "\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + commandString + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.1") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.2") + " ❱ \"},{\"text\":\"" + shortHelpMessage + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + helpMessage + "\"}]}}}]";
+		
+		this.helpMessage = plugin.msg.get("color.2") + commandColloredString + " §f" + helpMessage;
 	}
 	
 	String getJsonString() {
-		return this.jsonMessage;
+		return this.jsonHelpMessage;
 	}
 	
 	String getNormalString() {
-		return getColoredCommand() + " §f" + this.helpMessage;
-	}
-	
-	String getPermission() {
-		return this.permission;
+		return this.helpMessage;
 	}
 }

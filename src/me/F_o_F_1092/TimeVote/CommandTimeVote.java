@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import me.F_o_F_1092.TimeVote.PluginManager.HelpMessage;
+import me.F_o_F_1092.TimeVote.PluginManager.CommandListener;
 import me.F_o_F_1092.TimeVote.PluginManager.HelpPageListener;
 import me.F_o_F_1092.TimeVote.PluginManager.UpdateListener;
 
@@ -20,11 +20,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 
-public class CommnandTimeVote implements CommandExecutor {
+public class CommandTimeVote implements CommandExecutor {
 
 	private Main plugin;
 
-	public CommnandTimeVote(Main plugin) {
+	public CommandTimeVote(Main plugin) {
 		this.plugin = plugin;
 	}
 
@@ -33,7 +33,7 @@ public class CommnandTimeVote implements CommandExecutor {
 		if (args.length == 0) {
 			if (!(cs instanceof Player) || !plugin.useVoteGUI) {
 				String replaceCommand = plugin.msg.get("msg.22");
-				replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
+				replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv help (Page)").getColoredCommand());
 				cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 			} else {
 				Player p = (Player)cs;
@@ -63,13 +63,13 @@ public class CommnandTimeVote implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("help")) {
 				if (!(args.length >= 1 && args.length <= 2)) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv help (Page)").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
 						if (args.length != 1) {
 							String replaceCommand = plugin.msg.get("msg.22");
-							replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
+							replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv help (Page)").getColoredCommand());
 							cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 						} else {
 							HelpPageListener.sendNormalMessage(cs);
@@ -81,12 +81,12 @@ public class CommnandTimeVote implements CommandExecutor {
 						} else {
 							if (!HelpPageListener.isNumber(args[1])) {
 								String replaceCommand = plugin.msg.get("msg.22");
-								replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
+								replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv help (Page)").getColoredCommand());
 								cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 							} else {
 								if (Integer.parseInt(args[1]) <= 0 || Integer.parseInt(args[1]) > HelpPageListener.getMaxPlayerPages(p)) {
 									String replaceCommand = plugin.msg.get("msg.22");
-									replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
+									replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv help (Page)").getColoredCommand());
 									cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 								} else {
 									HelpPageListener.sendMessage(p, Integer.parseInt(args[1]) - 1);
@@ -98,7 +98,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("info")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv info"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv info").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					cs.sendMessage("§6-----§f[§6Time§eVote§f]§6-----");
@@ -109,7 +109,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("stats")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv stats"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv stats").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					TimeVoteStats tvs = new TimeVoteStats();
@@ -131,7 +131,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("day")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv day"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv day").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -206,7 +206,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("night")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv night"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv night").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -281,7 +281,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("yes")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv yes"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv yes").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -313,7 +313,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("no")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv no"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv no").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!(cs instanceof Player)) {
@@ -345,7 +345,7 @@ public class CommnandTimeVote implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("reload")) {
 				if (args.length != 1) {
 					String replaceCommand = plugin.msg.get("msg.22");
-					replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv reload"));
+					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv reload").getColoredCommand());
 					cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
 					if (!cs.hasPermission("TimeVote.Reload")) {
@@ -545,15 +545,6 @@ public class CommnandTimeVote implements CommandExecutor {
 						plugin.msg.put("helpTextGui.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpTextGui.2")));
 						plugin.msg.put("helpTextGui.3", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpTextGui.3")));
 						plugin.msg.put("helpTextGui.4", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpTextGui.4")));
-						plugin.msg.put("helpText.1", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.1")));
-						plugin.msg.put("helpText.2", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.2")));
-						plugin.msg.put("helpText.3", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.3")));
-						plugin.msg.put("helpText.4", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.4")));
-						plugin.msg.put("helpText.5", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.5")));
-						plugin.msg.put("helpText.6", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.6")));
-						plugin.msg.put("helpText.7", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.7")));
-						plugin.msg.put("helpText.8", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.8")));
-						plugin.msg.put("helpText.9", ChatColor.translateAlternateColorCodes('&', plugin.msg.get("color.2") + ymlFileMessage.getString("HelpText.9")));
 						plugin.msg.put("votingInventoryTitle.1", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.1")));
 						plugin.msg.put("votingInventoryTitle.2", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("VotingInventoryTitle.2")));
 						plugin.msg.put("bossBarAPIMessage", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("BossBarAPIMessage")));
@@ -566,17 +557,18 @@ public class CommnandTimeVote implements CommandExecutor {
 
 						HelpPageListener.setPluginNametag(plugin.msg.get("[TimeVote]"));
 						
-						HelpPageListener.addHelpMessage(new HelpMessage(null, plugin.msg.get("helpText.1"), "/tv help (Page)"));
-						HelpPageListener.addHelpMessage(new HelpMessage(null, plugin.msg.get("helpText.2"), "/tv info"));
-						HelpPageListener.addHelpMessage(new HelpMessage(null, plugin.msg.get("helpText.3"), "/tv stats"));
+						
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv help (Page)", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.1"))));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv info", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.2"))));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv stats", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.3"))));
 						if (plugin.useVoteGUI) {
-							HelpPageListener.addHelpMessage(new HelpMessage(null, plugin.msg.get("helpText.4"), "/tv"));
+							CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv", null, ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.4"))));
 						}
-						HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Day", plugin.msg.get("helpText.5"), "/tv day"));
-						HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Night", plugin.msg.get("helpText.6"), "/tv night"));
-						HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Vote", plugin.msg.get("helpText.7"), "/tv yes"));
-						HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Vote", plugin.msg.get("helpText.8"), "/tv no"));
-						HelpPageListener.addHelpMessage(new HelpMessage("TimeVote.Reload", plugin.msg.get("helpText.9"), "/tv reload"));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv day", "TimeVote.Day", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.5"))));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv night", "TimeVote.Night", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.6"))));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv yes", "TimeVote.Vote", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.7"))));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv no", "TimeVote.Vote", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.8"))));
+						CommandListener.addCommand(new me.F_o_F_1092.TimeVote.PluginManager.Command("/tv reload", "TimeVote.Reload", ChatColor.translateAlternateColorCodes('&', ymlFileMessage.getString("HelpText.9"))));
 						
 						
 						File fileStats = new File("plugins/TimeVote/Stats.yml");
@@ -607,7 +599,7 @@ public class CommnandTimeVote implements CommandExecutor {
 				}
 			} else {
 				String replaceCommand = plugin.msg.get("msg.22");
-				replaceCommand = replaceCommand.replace("[COMMAND]", HelpPageListener.getColoredCommand("/tv help (Page)"));
+				replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv help (Page)").getColoredCommand());
 				cs.sendMessage(plugin.msg.get("[TimeVote]") + replaceCommand); 
 			}
 		}

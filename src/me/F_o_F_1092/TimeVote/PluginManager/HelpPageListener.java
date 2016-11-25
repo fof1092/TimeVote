@@ -16,27 +16,9 @@ public class HelpPageListener {
 	static String pluginNametag;
 	static String helpCommand = "/TimeVote help";
 	static int maxHelpMessages = 5;
-	static List<HelpMessage> helpMessages = new ArrayList<HelpMessage>();
-	
+
 	public static void setPluginNametag(String pluginNametag) {
 		HelpPageListener.pluginNametag = pluginNametag;
-	}
-	
-	public static void addHelpMessage(HelpMessage helpMessage) {
-		helpMessages.add(helpMessage);
-	}
-	
-	public static void clearHelpMessages() {
-		helpMessages.clear();
-	}
-	
-	public static String getColoredCommand(String command) {
-		for (HelpMessage helpMessage : helpMessages) {
-			if (helpMessage.getCommand().equals(command)) {
-				return helpMessage.getColoredCommand();
-			}
-		}
-		return null;
 	}
 	
 	public static void sendMessage(Player p, int page) {
@@ -62,8 +44,8 @@ public class HelpPageListener {
 	public static void sendNormalMessage(CommandSender cs) {
 		cs.sendMessage(plugin.msg.get("color.1") + "§m----------------§r " + pluginNametag + plugin.msg.get("color.1") + "§m----------------");
 		cs.sendMessage("");
-		for (HelpMessage helpMessage : helpMessages) {
-			cs.sendMessage(helpMessage.getNormalString());
+		for (Command command : CommandListener.getAllCommands()) {
+			cs.sendMessage(command.getHelpMessage().getNormalString());
 		}
 		cs.sendMessage("");
 		cs.sendMessage(plugin.msg.get("color.1") + "§m----------------§r " + pluginNametag + plugin.msg.get("color.1") + "§m----------------");
@@ -118,9 +100,9 @@ public class HelpPageListener {
 	private static List<HelpMessage> getAllPersonalHelpMessages(Player p) {
 		List<HelpMessage> personalHelpMessages = new ArrayList<HelpMessage>();
 		
-		for (HelpMessage helpMessage : helpMessages) {
-			if (helpMessage.getPermission()== null || p.hasPermission(helpMessage.getPermission())) {
-				personalHelpMessages.add(helpMessage);
+		for (Command command : CommandListener.getAllCommands()) {
+			if (command.getPermission()== null || p.hasPermission(command.getPermission())) {
+				personalHelpMessages.add(command.getHelpMessage());
 			}
 		}
 		
