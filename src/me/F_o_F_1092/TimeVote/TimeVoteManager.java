@@ -43,8 +43,8 @@ public class TimeVoteManager {
 			try {
 				voteGUI = Bukkit.createInventory(null, 9, plugin.msg.get("votingInventoryTitle.1"));
 			} catch (Exception e1) {
-				voteGUI = Bukkit.createInventory(null, 9, "Â§f[Â§6TÂ§eVÂ§f]" + plugin.msg.get("color.2") + " Voting...");
-				System.out.println("\u001B[31m[TimeVote] ERROR: 005 | The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
+				voteGUI = Bukkit.createInventory(null, 9, "§f[§6T§eV§f]" + plugin.msg.get("color.2") + " Voting...");
+				System.out.println("\u001B[31m[TimeVote] The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
 			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)4);
@@ -63,8 +63,8 @@ public class TimeVoteManager {
 				replace = replace.replace("[TIME]", tv.getTime());
 				voteGUI = Bukkit.createInventory(null, 9, replace);
 			} catch (Exception e1) {
-				voteGUI = Bukkit.createInventory(null, 9, "Â§f[Â§6TÂ§eVÂ§f] " + plugin.msg.get("color.2") + tv.getTime());
-				System.out.println("\u001B[31m[TimeVote] ERROR: 006 | The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
+				voteGUI = Bukkit.createInventory(null, 9, "§f[§6T§eV§f] " + plugin.msg.get("color.2") + tv.getTime());
+				System.out.println("\u001B[31m[TimeVote] The Voring-Inventory text caused a problem. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
 			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)5);

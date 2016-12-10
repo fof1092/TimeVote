@@ -111,14 +111,14 @@ public class TimeVote {
 				objective.setDisplayName(plugin.msg.get("[TimeVote]") + plugin.msg.get("text.1"));
 			} catch (Exception e1) {
 				objective.setDisplayName("§f[§6Time§eVote§f] DAY");
-				System.out.println("\u001B[31m[TimeVote] ERROR: 001 | The scoreboard name caused a problem. (Message: text.1) [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] The scoreboard name caused a problem. (Message: text.1) [" + e1.getMessage() +"]\u001B[0m");
 			}
 		} else {
 			try {
 				objective.setDisplayName(plugin.msg.get("[TimeVote]") + plugin.msg.get("text.2"));
 			} catch (Exception e1) {
 				objective.setDisplayName("§f[§6Time§eVote§f] NIGHT");
-				System.out.println("\u001B[31m[TimeVote] ERROR: 002 | The scoreboard name caused a problem. (Message: text.2) [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] The scoreboard name caused a problem. (Message: text.2) [" + e1.getMessage() +"]\u001B[0m");
 			}
 		}
 
@@ -129,7 +129,7 @@ public class TimeVote {
 		try {
 			Bukkit.getPlayer(player).getScoreboard().getObjective("TimeVote").unregister();
 		} catch (Exception e1) {
-			System.out.println("\u001B[31m[TimeVote] ERROR: 008 | The scoreboard could not be removed from the Player. [" + e1.getMessage() +"]\u001B[0m");
+			System.out.println("\u001B[31m[TimeVote] The scoreboard could not be removed from the Player. [" + e1.getMessage() +"]\u001B[0m");
 		}
 	}
 
@@ -149,7 +149,7 @@ public class TimeVote {
 				scoreYes = objective.getScore(plugin.msg.get("text.3"));
 			} catch (Exception e1) {
 				scoreYes = objective.getScore(plugin.msg.get("text.2") + "YES");
-				System.out.println("\u001B[31m[TimeVote] ERROR: 003 | The scoreboard text for YES caused a problem. (Message: text.3) [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] The scoreboard text for YES caused a problem. (Message: text.3) [" + e1.getMessage() +"]\u001B[0m");
 			}
 			scoreYes.setScore(getYesVotes());
 			Score scoreNo;
@@ -157,7 +157,7 @@ public class TimeVote {
 				scoreNo = objective.getScore(plugin.msg.get("text.4"));
 			} catch (Exception e1) {
 				scoreNo = objective.getScore(plugin.msg.get("text.2") + "NO");
-				System.out.println("\u001B[31m[TimeVote] ERROR: 004 | The scoreboard text for NO caused a problem. (Message: text.4) [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] The scoreboard text for NO caused a problem. (Message: text.4) [" + e1.getMessage() +"]\u001B[0m");
 			}
 			scoreNo.setScore(getNoVotes());
 		}

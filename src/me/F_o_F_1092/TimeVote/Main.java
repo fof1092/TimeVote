@@ -92,7 +92,7 @@ public class Main extends JavaPlugin {
 				ymlFileConfig.set("VotingInventoryMessages", true);
 				ymlFileConfig.save(fileConfig);
 			} catch (IOException e1) {
-				System.out.println("\u001B[31m[TimeVote] ERROR: 009 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 			}
 
 			disabledWorlds.clear();
@@ -112,7 +112,7 @@ public class Main extends JavaPlugin {
 					ymlFileConfig.set("CheckForHiddenPlayers", false);
 					ymlFileConfig.save(fileConfig);
 				} catch (IOException e1) {
-					System.out.println("\u001B[31m[TimeVote] ERROR: 010 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
+					System.out.println("\u001B[31m[TimeVote] Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
 			} else if (version < UpdateListener.getUpdateDoubleVersion()) {
 				try {
@@ -139,7 +139,7 @@ public class Main extends JavaPlugin {
 					}
 					ymlFileConfig.save(fileConfig);
 				} catch (IOException e1) {
-					System.out.println("\u001B[31m[TimeVote] ERROR: 011 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
+					System.out.println("\u001B[31m[TimeVote] Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
 			}
 		}
@@ -240,7 +240,7 @@ public class Main extends JavaPlugin {
 				ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv yes\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 				ymlFileMessage.save(fileMessages);
 			} catch (IOException e1) {
-				System.out.println("\u001B[31m[TimeVote] ERROR: 012 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 			}
 		} else {
 			double version = ymlFileMessage.getDouble("Version");
@@ -302,7 +302,7 @@ public class Main extends JavaPlugin {
 					ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv day\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
-					System.out.println("\u001B[31m[TimeVote] ERROR: 013 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
+					System.out.println("\u001B[31m[TimeVote] Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
 			} else if (version < UpdateListener.getUpdateDoubleVersion()) {
 				try {
@@ -365,7 +365,7 @@ public class Main extends JavaPlugin {
 					}
 					ymlFileMessage.save(fileMessages);
 				} catch (IOException e1) {
-					
+					System.out.println("\u001B[31m[TimeVote] Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
 			}
 		}
@@ -455,7 +455,7 @@ public class Main extends JavaPlugin {
 				ymlFileStats.set("MoneySpent", 0.00);
 				ymlFileStats.save(fileStats);
 			} catch (IOException e1) {
-				System.out.println("\u001B[31m[TimeVote] ERROR: 015 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
+				System.out.println("\u001B[31m[TimeVote] Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
 			}
 		} else {
 			double version = ymlFileStats.getDouble("Version");
@@ -467,7 +467,7 @@ public class Main extends JavaPlugin {
 					}
 					ymlFileStats.save(fileStats);
 				} catch (IOException e1) {
-					System.out.println("\u001B[31m[TimeVote] ERROR: 016 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
+					System.out.println("\u001B[31m[TimeVote] Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
 				}
 			}
 		}

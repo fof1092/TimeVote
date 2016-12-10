@@ -23,8 +23,8 @@ import me.F_o_F_1092.TimeVote.Main;
 public class UpdateListener {
 
 	static boolean updateAvailable = false;
-	static double updateDouble = 1.14;
-    static String updateString = "1.1.4";
+	static double updateDouble = 1.17;
+    static String updateString = "1.1.7";
 	static String versionURL = "https://fof1092.de/Plugins/TV/version.txt";
 	static String tag = "[TimeVote]";
 	

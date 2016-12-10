@@ -386,6 +386,8 @@ public class CommandTimeVote implements CommandExecutor {
 						plugin.votes.clear();
 						plugin.disabledWorlds.clear();
 
+						CommandListener.clearCommands();
+						
 						File fileConfig = new File("plugins/TimeVote/Config.yml");
 						FileConfiguration ymlFileConfig = YamlConfiguration.loadConfiguration(fileConfig);
 
@@ -412,7 +414,7 @@ public class CommandTimeVote implements CommandExecutor {
 								ymlFileConfig.set("VotingInventoryMessages", true);
 								ymlFileConfig.save(fileConfig);
 							} catch (IOException e1) {
-								System.out.println("\u001B[31m[TimeVote] ERROR: 009 | Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
+								System.out.println("\u001B[31m[TimeVote] Can't create the Config.yml. [" + e1.getMessage() +"]\u001B[0m");
 							}
 
 							plugin.disabledWorlds.clear();
@@ -500,7 +502,7 @@ public class CommandTimeVote implements CommandExecutor {
 								ymlFileMessage.set("RawMessage.1", "[\"\",{\"text\":\"There is a new voting for \",\"color\":\"gold\"},{\"text\":\"[TIME]\",\"color\":\"yellow\"},{\"text\":\" time, vote with \",\"color\":\"gold\"},{\"text\":\"/tv yes\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv yes\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv yes\",\"color\":\"yellow\"}]}}},{\"text\":\" or \",\"color\":\"gold\"},{\"text\":\"/tv no\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/tv no\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"/tv no\",\"color\":\"yellow\"}]}}},{\"text\":\".\",\"color\":\"gold\"}]");
 								ymlFileMessage.save(fileMessages);
 							} catch (IOException e1) {
-								System.out.println("\u001B[31m[TimeVote] ERROR: 012 | Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
+								System.out.println("\u001B[31m[TimeVote] Can't create the Messages.yml. [" + e1.getMessage() +"]\u001B[0m");
 							}
 						}
 
@@ -590,7 +592,7 @@ public class CommandTimeVote implements CommandExecutor {
 								ymlFileStats.set("MoneySpent", 0.00);
 								ymlFileStats.save(fileStats);
 							} catch (IOException e1) {
-								System.out.println("\u001B[31m[TimeVote] ERROR: 015 | Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
+								System.out.println("\u001B[31m[TimeVote] Can't create the Stats.yml. [" + e1.getMessage() +"]\u001B[0m");
 							}
 						}
 
