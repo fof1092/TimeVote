@@ -1,12 +1,13 @@
 package me.F_o_F_1092.TimeVote.PluginManager;
 
-import org.bukkit.Bukkit;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.F_o_F_1092.TimeVote.Main;
 
 public class HelpMessage {
 
-	private static Main plugin = (Main)Bukkit.getPluginManager().getPlugin("TimeVote");
+	static Main plugin = Main.getPlugin();
 	
 	String helpMessage;
 	String jsonHelpMessage;
@@ -20,8 +21,25 @@ public class HelpMessage {
 			shortHelpMessage = helpMessage;
 		}
 		
-		this.jsonHelpMessage = "[\"\",{\"text\":\"" + commandColloredString + "\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + commandString + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.1") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.2") + " ❱ \"},{\"text\":\"" + shortHelpMessage + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + helpMessage + "\"}]}}}]";
 		
+		List<JSONMessage> jsonMessages = new ArrayList<JSONMessage>();
+		
+		JSONMessage jsonHelpCommand = new JSONMessage(commandColloredString);
+		jsonHelpCommand.setPreviewCommand(commandString);
+		jsonHelpCommand.setHoverText(plugin.msg.get("helpTextGui.1"));
+		
+		
+		JSONMessage jsonSplitMessage = new JSONMessage(plugin.msg.get("color.2") + " \u2771 ");
+		
+		
+		JSONMessage jsonHelpMessage = new JSONMessage(shortHelpMessage);
+		jsonHelpMessage.setHoverText(helpMessage);
+		
+		jsonMessages.add(jsonHelpCommand);
+		jsonMessages.add(jsonSplitMessage);
+		jsonMessages.add(jsonHelpMessage);
+				
+		this.jsonHelpMessage = JSONMessageListener.putJSONMessagesTogether(jsonMessages);
 		this.helpMessage = plugin.msg.get("color.2") + commandColloredString + " §f" + helpMessage;
 	}
 	

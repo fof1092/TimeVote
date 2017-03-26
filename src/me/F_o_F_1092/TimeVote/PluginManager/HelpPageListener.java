@@ -3,7 +3,6 @@ package me.F_o_F_1092.TimeVote.PluginManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,13 +10,14 @@ import me.F_o_F_1092.TimeVote.Main;
 
 public class HelpPageListener {
 
-	private static Main plugin = (Main)Bukkit.getPluginManager().getPlugin("TimeVote");
+	static Main plugin = Main.getPlugin();
 	
 	static String pluginNametag;
-	static String helpCommand = "/TimeVote help";
+	static String helpCommand;
 	static int maxHelpMessages = 5;
 
-	public static void setPluginNametag(String pluginNametag) {
+	public static void initializeHelpPageListener(String helpCommand, String pluginNametag) {
+		HelpPageListener.helpCommand = helpCommand;
 		HelpPageListener.pluginNametag = pluginNametag;
 	}
 	
@@ -26,10 +26,10 @@ public class HelpPageListener {
 		List<HelpMessage> personalHelpPageMessages = getHelpPageMessages(p, personalHelpMessages, page);
 		
 		p.sendMessage("");
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + p.getName() + " " + getNavBar(personalHelpMessages, personalHelpPageMessages, page));
+		JSONMessageListener.send(p, getNavBar(personalHelpMessages, personalHelpPageMessages, page));
 		p.sendMessage("");
 		for (HelpMessage hm : personalHelpPageMessages) {
-			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + p.getName() + " " + hm.getJsonString());
+			JSONMessageListener.send(p, hm.getJsonString());
 		}
 		p.sendMessage("");
 		
@@ -37,7 +37,7 @@ public class HelpPageListener {
 			p.sendMessage(plugin.msg.get("helpTextGui.4").replace("[PAGE]", (page + 1) + ""));
 		}
 		
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + p.getName() + " " + getNavBar(personalHelpMessages, personalHelpPageMessages, page));
+		JSONMessageListener.send(p, getNavBar(personalHelpMessages, personalHelpPageMessages, page));
 		p.sendMessage("");
 	}
 	
@@ -52,29 +52,51 @@ public class HelpPageListener {
 	}
 	
 	private static String getNavBar(List<HelpMessage> personalHelpMessages, List<HelpMessage> personalHelpPageMessages, int page) {
-		String stringHeader = "[\"\",";
+		List<JSONMessage> jsonMessages = new ArrayList<JSONMessage>();
 		
-		stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "§m-\"},";
+		JSONMessage stringStartMessage = new JSONMessage(plugin.msg.get("color.1") + "§m-");
 		
+		JSONMessage stringLastPageMessage1;
+		JSONMessage stringLastPageMessage2;
 		if (page != 0) {
-			stringHeader += "{\"text\":\"" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + "<" + plugin.msg.get("color.2") + "]\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + helpCommand + " " + (page) + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.3") + "\"}]}}},{\"text\":\"" + plugin.msg.get("color.1") + "-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") +"§m-\"},";
+			stringLastPageMessage1 = new JSONMessage(plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + "<" + plugin.msg.get("color.2") + "]");
+			stringLastPageMessage1.setRunCommand(helpCommand + " " + (page));
+			stringLastPageMessage1.setHoverText(plugin.msg.get("helpTextGui.3"));
+			
+			stringLastPageMessage2 = new JSONMessage(plugin.msg.get("color.1") + "-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") +"§m-");
 		} else {
-			stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "§m------\"},";
+			stringLastPageMessage1 = new JSONMessage(plugin.msg.get("color.1") + "§m------");
+			stringLastPageMessage2 = new JSONMessage("");
 		}
 		
-		stringHeader += "{\"text\":\"" + plugin.msg.get("color.1") + "§m---------§r " + pluginNametag.replace("§l", "") + plugin.msg.get("color.1") + "§m---------\"}";
+		JSONMessage stringHeaderMessage = new JSONMessage(plugin.msg.get("color.1") + "§m---------§r " + pluginNametag.replace("§l", "") + plugin.msg.get("color.1") + "§m---------");
 		
-		if (getMaxPlayerPages(personalHelpMessages) > page + 1) {
-			stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "§m-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page + 2) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") + "§m-\"},{\"text\":\"" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + ">" + plugin.msg.get("color.2") + "]\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + helpCommand + " " + (page + 2) + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + plugin.msg.get("helpTextGui.2") + "\"}]}}}";
+		JSONMessage stringNextPageMessage1;
+		JSONMessage stringNextPageMessage2;
+		if ((page + 1) < getMaxPlayerPages(personalHelpMessages)) {
+			stringNextPageMessage1 = new JSONMessage(plugin.msg.get("color.1") + "§m-" + plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + (page + 2) + plugin.msg.get("color.2") + "]" + plugin.msg.get("color.1") + "§m-");
+			
+			stringNextPageMessage2 = new JSONMessage(plugin.msg.get("color.2") + "[" + plugin.msg.get("color.1") + ">" + plugin.msg.get("color.2") + "]");
+			stringNextPageMessage2.setRunCommand(helpCommand + " " + (page + 2));
+			stringNextPageMessage2.setHoverText(plugin.msg.get("helpTextGui.2"));
+			
 		} else {
-			stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "§m------\"}";
+			stringNextPageMessage1 = new JSONMessage(plugin.msg.get("color.1") + "§m------");
+			stringNextPageMessage2 = new JSONMessage("");
 		}
 		
-		stringHeader += ",{\"text\":\"" + plugin.msg.get("color.1") + "§m-\"}";
+		JSONMessage stringEndMessage = new JSONMessage(plugin.msg.get("color.1") + "§m-");
 		
-		stringHeader += "]";
 		
-		return stringHeader;
+		jsonMessages.add(stringStartMessage);
+		jsonMessages.add(stringLastPageMessage1);
+		jsonMessages.add(stringLastPageMessage2);
+		jsonMessages.add(stringHeaderMessage);
+		jsonMessages.add(stringNextPageMessage1);
+		jsonMessages.add(stringNextPageMessage2);
+		jsonMessages.add(stringEndMessage);
+
+		return JSONMessageListener.putJSONMessagesTogether(jsonMessages);
 	}
 	
 	private static List<HelpMessage> getHelpPageMessages(Player p, List<HelpMessage> personalHelpMessages, int page) {
@@ -90,11 +112,11 @@ public class HelpPageListener {
 	}
 	
 	public static int getMaxPlayerPages(Player p) {
-		return (int) Math.ceil(((double)getAllPersonalHelpMessages(p).size() / (double)maxHelpMessages));
+		return (int) java.lang.Math.ceil(((double)getAllPersonalHelpMessages(p).size() / (double)maxHelpMessages));
 	}
 	
 	public static int getMaxPlayerPages(List<HelpMessage> personalHelpMessages) {
-		return (int) Math.ceil(((double)personalHelpMessages.size() / (double)maxHelpMessages));
+		return (int) java.lang.Math.ceil(((double)personalHelpMessages.size() / (double)maxHelpMessages));
 	}
 	
 	private static List<HelpMessage> getAllPersonalHelpMessages(Player p) {
@@ -107,18 +129,5 @@ public class HelpPageListener {
 		}
 		
 		return personalHelpMessages;
-	}
-	
-	public static boolean isNumber(String str)  
-	{  
-	  try  
-	  {  
-	    Integer.parseInt(str);  
-	  }  
-	  catch(NumberFormatException nfe)  
-	  {  
-	    return false;  
-	  }  
-	  return true;  
 	}
 }

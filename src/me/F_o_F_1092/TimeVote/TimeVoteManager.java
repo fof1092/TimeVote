@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class TimeVoteManager {
 
-	private static Main plugin = (Main)Bukkit.getPluginManager().getPlugin("TimeVote");
+	private static Main plugin = Main.getPlugin();
 
 	public static boolean isVotingAtWorld(String worldName) {
 		return plugin.votes.containsKey(worldName);

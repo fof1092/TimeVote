@@ -1,12 +1,10 @@
 package me.F_o_F_1092.TimeVote.PluginManager;
 
-import org.bukkit.Bukkit;
-
 import me.F_o_F_1092.TimeVote.Main;
 
 public class Command {
 	
-	private static Main plugin = (Main)Bukkit.getPluginManager().getPlugin("TimeVote");
+	static Main plugin = Main.getPlugin();
 	
 	String permission;
 	String commandString;
@@ -30,11 +28,11 @@ public class Command {
 		return this.commandString;
 	}
 	
-	String getPermission() {
+	public String getPermission() {
 		return this.permission;
 	}
 	
-	HelpMessage getHelpMessage() {
+	public HelpMessage getHelpMessage() {
 		return this.helpMessage;
 	}
 }

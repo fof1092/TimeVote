@@ -21,7 +21,7 @@ public class CommandListener {
 	
 	public static Command getCommand(String commandString) {
 		for (Command command : commands) {
-			if (commandString.toLowerCase().startsWith(command.getCommandString().toLowerCase())) {
+			if (commandString.toLowerCase().equals(command.getCommandString().toLowerCase())) {
 				return command;
 			}
 		}
