@@ -1,10 +1,8 @@
 package me.F_o_F_1092.TimeVote.PluginManager;
 
-import me.F_o_F_1092.TimeVote.Main;
+import me.F_o_F_1092.TimeVote.Options;
 
 public class Command {
-	
-	static Main plugin = Main.getPlugin();
 	
 	String permission;
 	String commandString;
@@ -13,7 +11,8 @@ public class Command {
 	
 	public Command(String commandString, String permission, String helpMessage) {
 		this.commandString = commandString;
-		this.commandColloredString = plugin.msg.get("color.1") + this.commandString.replace("[", plugin.msg.get("color.1") + "[" + plugin.msg.get("color.2")).replace("(", plugin.msg.get("color.1") + "(" + plugin.msg.get("color.2")).replace("]", plugin.msg.get("color.1") + "]" + plugin.msg.get("color.2")).replace(")", plugin.msg.get("color.1") + ")" + plugin.msg.get("color.2")).replace("|", plugin.msg.get("color.1") + "|" + plugin.msg.get("color.2"));
+		
+		this.commandColloredString = Options.msg.get("color.1") + this.commandString.replace("[", Options.msg.get("color.1") + "[" + Options.msg.get("color.2")).replace("(", Options.msg.get("color.1") + "(" + Options.msg.get("color.2")).replace("]", Options.msg.get("color.1") + "]" + Options.msg.get("color.2")).replace(")", Options.msg.get("color.1") + ")" + Options.msg.get("color.2")).replace("|", Options.msg.get("color.1") + "|" + Options.msg.get("color.2"));
 		
 		this.permission = permission;
 		
@@ -24,7 +23,7 @@ public class Command {
 		return this.commandColloredString;
 	}
 	
-	String getCommandString() {
+	public String getCommandString() {
 		return this.commandString;
 	}
 	

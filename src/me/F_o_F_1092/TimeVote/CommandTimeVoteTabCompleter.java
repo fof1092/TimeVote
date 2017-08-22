@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.F_o_F_1092.TimeVote.PluginManager.CommandListener;
-import me.F_o_F_1092.TimeVote.PluginManager.HelpPageListener;
-import me.F_o_F_1092.TimeVote.PluginManager.TabCompleteListener;
+import me.F_o_F_1092.TimeVote.PluginManager.Spigot.HelpPageListener;
+import me.F_o_F_1092.TimeVote.PluginManager.Spigot.TabCompleteListener;
 
 public class CommandTimeVoteTabCompleter implements TabCompleter {
 

@@ -3,20 +3,19 @@ package me.F_o_F_1092.TimeVote.PluginManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.F_o_F_1092.TimeVote.Main;
+import me.F_o_F_1092.TimeVote.Options;
+import me.F_o_F_1092.TimeVote.PluginManager.VersionManager.ServerType;
 
 public class HelpMessage {
 
-	static Main plugin = Main.getPlugin();
-	
 	String helpMessage;
 	String jsonHelpMessage;
 	
 	public HelpMessage(String commandString, String commandColloredString, String helpMessage) {
 		String shortHelpMessage;
 		
-		if (helpMessage.length() > (60 - commandColloredString.replace(plugin.msg.get("color.2"), "").replace(plugin.msg.get("color.1"), "").length() - 3)) {
-			shortHelpMessage = helpMessage.substring(0, (60 - commandColloredString.replace(plugin.msg.get("color.2"), "").replace(plugin.msg.get("color.1"), "").length() - 3)) + "...";
+		if (helpMessage.length() > (60 - commandColloredString.replace(Options.msg.get("color.2"), "").replace(Options.msg.get("color.1"), "").length() - 3)) {
+			shortHelpMessage = helpMessage.substring(0, (60 - commandColloredString.replace(Options.msg.get("color.2"), "").replace(Options.msg.get("color.1"), "").length() - 3)) + "...";
 		} else {
 			shortHelpMessage = helpMessage;
 		}
@@ -26,10 +25,10 @@ public class HelpMessage {
 		
 		JSONMessage jsonHelpCommand = new JSONMessage(commandColloredString);
 		jsonHelpCommand.setPreviewCommand(commandString);
-		jsonHelpCommand.setHoverText(plugin.msg.get("helpTextGui.1"));
+		jsonHelpCommand.setHoverText(Options.msg.get("helpTextGui.1"));
 		
 		
-		JSONMessage jsonSplitMessage = new JSONMessage(plugin.msg.get("color.2") + " \u2771 ");
+		JSONMessage jsonSplitMessage = new JSONMessage(Options.msg.get("color.2") + " \u2771 ");
 		
 		
 		JSONMessage jsonHelpMessage = new JSONMessage(shortHelpMessage);
@@ -38,16 +37,20 @@ public class HelpMessage {
 		jsonMessages.add(jsonHelpCommand);
 		jsonMessages.add(jsonSplitMessage);
 		jsonMessages.add(jsonHelpMessage);
-				
-		this.jsonHelpMessage = JSONMessageListener.putJSONMessagesTogether(jsonMessages);
-		this.helpMessage = plugin.msg.get("color.2") + commandColloredString + " §f" + helpMessage;
+		
+		if (VersionManager.getServerType() == ServerType.BUKKIT) {
+			this.jsonHelpMessage = me.F_o_F_1092.TimeVote.PluginManager.Spigot.JSONMessageListener.putJSONMessagesTogether(jsonMessages);
+		} else if (VersionManager.getServerType() == ServerType.BUNGEECORD) {
+			//this.jsonHelpMessage = me.F_o_F_1092.MessageMe.PluginManager.Bungeecord.JSONMessageListener.putJSONMessagesTogether(jsonMessages);
+		}
+		this.helpMessage = Options.msg.get("color.2") + commandColloredString + " §f" + helpMessage;
 	}
 	
-	String getJsonString() {
+	public String getJsonString() {
 		return this.jsonHelpMessage;
 	}
 	
-	String getNormalString() {
+	public String getNormalString() {
 		return this.helpMessage;
 	}
 }

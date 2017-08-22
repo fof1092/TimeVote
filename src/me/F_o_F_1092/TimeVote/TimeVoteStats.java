@@ -28,7 +28,7 @@ public class TimeVoteStats {
 	public TimeVoteStats() {
 	}
 
-	void setDayStats(int yes, int no, boolean won, double moneySpent) {
+	public void setDayStats(int yes, int no, boolean won, double moneySpent) {
 		this.dayYes += yes;
 		this.dayNo += no;
 
@@ -43,7 +43,7 @@ public class TimeVoteStats {
 		save();
 	}
 
-	void setNightStats(int yes, int no, boolean won, double moneySpent) {
+	public void setNightStats(int yes, int no, boolean won, double moneySpent) {
 		this.nightYes += yes;
 		this.nightNo += no;
 
