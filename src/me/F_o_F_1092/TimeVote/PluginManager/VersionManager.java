@@ -1,13 +1,28 @@
 package me.F_o_F_1092.TimeVote.PluginManager;
 
+import me.F_o_F_1092.TimeVote.PluginManager.VersionManager;
+
 public class VersionManager {
 
-	static Version version;
+	static BukkitVersion bukkitVersion;
+	static BungeeVersion bungeeVersion;
+	
 	static ServerType serverType;
 	static boolean selfSet;
 	
-	public enum Version {
-		MC_V1_7, MC_V1_8, MC_V1_9, MC_V1_0, MC_V1_10, MC_V1_11, MC_V1_12, BUNGEE_V1_7, BUNGEE_V1_8, BUNGEE_V1_9, BUNGEE_V1_0, BUNGEE_V1_10, BUNGEE_V1_11, BUNGEE_V1_12, UNKNOWN
+	public enum BukkitVersion {
+		v1_7_R1, v1_7_R2, v1_7_R3, v1_7_R4,
+		v1_8_R1, v1_8_R2, v1_8_R3,
+		v1_9_R1, v1_9_R2,
+		v1_10_R1,
+		v1_11_R1,
+		v1_12_R1,
+		v1_13_R1,
+		UNKNOWN
+	}
+	
+	public enum BungeeVersion {
+		v1_7, v1_8, v1_9, v1_0, v1_10, v1_11, v1_12, v1_13, UNKNOWN
 	}
 	
 	public enum ServerType {
@@ -19,70 +34,52 @@ public class VersionManager {
 		
 		if (serverType == ServerType.BUKKIT) {
 			
-			version = version.split("\\(")[1];
-			version = version.split("\\)")[0];
-			version = version.replace("MC: ", "");
-			
-			if (version.startsWith("1.7")) {
-				VersionManager.version = Version.MC_V1_7;
-			} else if (version.startsWith("1.8")) {
-				VersionManager.version = Version.MC_V1_8;
-			} else if (version.startsWith("1.9")) {
-				VersionManager.version = Version.MC_V1_9;
-			} else if (version.startsWith("1.0")) {
-				VersionManager.version = Version.MC_V1_0;
-			} else if (version.startsWith("1.10")) {
-				VersionManager.version = Version.MC_V1_10;
-			} else if (version.startsWith("1.11")) {
-				VersionManager.version = Version.MC_V1_11;
-			} else if (version.startsWith("1.12")) {
-				VersionManager.version = Version.MC_V1_12;
-			} else {
-				VersionManager.version = Version.UNKNOWN;
+			try {
+				bukkitVersion = BukkitVersion.valueOf(version);
+			} catch (Exception e) {
+				bukkitVersion = BukkitVersion.UNKNOWN;
 			}
+			
 		} else if (serverType == ServerType.BUNGEECORD) {
 			
 			version = version.replace("git:BungeeCord-Bootstrap:", "");
 			version = version.split("-")[0];
 			
 			if (version.startsWith("1.7")) {
-				VersionManager.version = Version.BUNGEE_V1_7;
+				VersionManager.bungeeVersion = BungeeVersion.v1_7;
 			} else if (version.startsWith("1.8")) {
-				VersionManager.version = Version.BUNGEE_V1_8;
+				VersionManager.bungeeVersion = BungeeVersion.v1_8;
 			} else if (version.startsWith("1.9")) {
-				VersionManager.version = Version.BUNGEE_V1_9;
+				VersionManager.bungeeVersion = BungeeVersion.v1_9;
 			} else if (version.startsWith("1.0")) {
-				VersionManager.version = Version.BUNGEE_V1_0;
+				VersionManager.bungeeVersion = BungeeVersion.v1_0;
 			} else if (version.startsWith("1.10")) {
-				VersionManager.version = Version.BUNGEE_V1_10;
+				VersionManager.bungeeVersion = BungeeVersion.v1_10;
 			} else if (version.startsWith("1.11")) {
-				VersionManager.version = Version.BUNGEE_V1_11;
+				VersionManager.bungeeVersion = BungeeVersion.v1_11;
 			} else if (version.startsWith("1.12")) {
-				VersionManager.version = Version.BUNGEE_V1_12;
+				VersionManager.bungeeVersion = BungeeVersion.v1_12;
+			} else if (version.startsWith("1.13")) {
+				VersionManager.bungeeVersion = BungeeVersion.v1_13;
 			} else {
-				VersionManager.version = Version.UNKNOWN;
+				VersionManager.bungeeVersion = BungeeVersion.UNKNOWN;
 			}
+			
 		} else {
-			VersionManager.version = Version.UNKNOWN;
+			VersionManager.bungeeVersion = BungeeVersion.UNKNOWN;
 		}
 	}
 	
-	public static Version getVersion() {
-		return VersionManager.version;
+	public static BukkitVersion getBukkitVersion() {
+		return bukkitVersion;
+	}
+	
+	public static BungeeVersion getBungeeVersion() {
+		return bungeeVersion;
 	}
 	
 	public static ServerType getServerType() {
 		return VersionManager.serverType;
-	}
-	
-	public static String getVersionSring() {
-		if (version.toString().startsWith("MC")) {
-			return version.toString().replace("MC_V", "").replace("_", ".") + ".X";
-		} else if (version.toString().startsWith("BUNGEE")) {
-			return version.toString().replace("BUNGEE_V", "").replace("_", ".") + ".X";
-		} else {
-			return "Unknown";
-		}
 	}
 	
 	public static String getSetverTypeString() {

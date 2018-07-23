@@ -1,5 +1,6 @@
 name: TimeVote
-version: 1.3
+version: 1.41
+api-version: 1.13
 main: me.F_o_F_1092.TimeVote.Main
 author: F_o_F_1092
 commands:

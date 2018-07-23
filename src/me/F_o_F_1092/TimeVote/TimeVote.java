@@ -124,14 +124,22 @@ public class TimeVote {
 		List<Player> players = new ArrayList<Player>();
 		
 		for (Player p : Bukkit.getWorld(this.worldName).getPlayers()) {
-			if (Bukkit.getPlayer(p.getName()) != null && Bukkit.getPlayer(p.getName()).isOnline() && !p.hasMetadata("NPC")) {
-				if (!Options.showVoteOnlyToPlayersWithPermission || Options.showVoteOnlyToPlayersWithPermission && (p.hasPermission("TimeVote.Vote") || p.hasPermission("TimeVote.Day") || p.hasPermission("TimeVote.Night"))) {
-					players.add(p);
-				}
+			if (checkPlayerAtWorldPermission(p)) {
+				players.add(p);
 			}
 		}
 		
 		return players;
+	}
+	
+	boolean checkPlayerAtWorldPermission(Player p) {
+		if (Bukkit.getPlayer(p.getName()) != null && Bukkit.getPlayer(p.getName()).isOnline() && !p.hasMetadata("NPC")) {
+			if (!Options.showVoteOnlyToPlayersWithPermission || Options.showVoteOnlyToPlayersWithPermission && (p.hasPermission("TimeVote.Vote") || p.hasPermission("TimeVote.Day") || p.hasPermission("TimeVote.Night"))) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	
@@ -204,7 +212,7 @@ public class TimeVote {
 	 */
 	
 	void switchWorld(Player p, boolean votingWorld) {
-		if (getAllPlayersAtWorld().contains(p)) {
+		if (checkPlayerAtWorldPermission(p)) {
 			if (getTimerType() != TimerType.TIMEOUT) {
 				if (votingWorld) {
 					
@@ -545,9 +553,9 @@ public class TimeVote {
 	 * Scoreboard Managing
 	 */
 	
-	void registerScoreboard(Player p) {
+	protected void registerScoreboard(Player p) {
 		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective objective = sb.registerNewObjective("TimeVote", "dummy");
+		Objective objective = sb.registerNewObjective("TimeVote", "dummy", "");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		if (getTime() == Time.DAY) {
@@ -595,7 +603,7 @@ public class TimeVote {
 		}
 	}
 	
-	void updateScore(Player p) {
+	protected void updateScore(Player p) {
 		if (p.getScoreboard().getObjective("TimeVote") != null) {
 			Objective objective = p.getScoreboard().getObjective("TimeVote");
 			Score scoreYes;

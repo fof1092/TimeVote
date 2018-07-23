@@ -1,4 +1,4 @@
-package me.F_o_F_1092.TimeVote.VotingGUI;
+package me.F_o_F_1092.TimeVote.VotingGUI.MC_V1_7__V1_12;
 
 import java.util.UUID;
 
@@ -10,27 +10,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.F_o_F_1092.TimeVote.Options;
 import me.F_o_F_1092.TimeVote.TimeVote;
+import me.F_o_F_1092.TimeVote.TimeVote.Time;
 import me.F_o_F_1092.TimeVote.TimeVoteListener;
 import me.F_o_F_1092.TimeVote.PluginManager.ServerLog;
-import me.F_o_F_1092.TimeVote.TimeVote.Time;
 
-public class VotingGUIPlayer {
+public class VotingGUIPlayer extends me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIPlayer {
 
-	protected UUID uuid;
-	protected String worldName;
-	
-	
-	protected VotingGUIPlayer(UUID uuid, String worldName) {
-		this.uuid = uuid;
-		this.worldName = worldName;
-	}
-	
-	UUID getUUID() {
-		return this.uuid;
-	}
-	
-	String getWorldName() {
-		return this.worldName;
+	public VotingGUIPlayer(UUID uuid, String worldName) {
+		super(uuid, worldName);
 	}
 	
 	protected void openVoteingGUI() {
@@ -47,12 +34,12 @@ public class VotingGUIPlayer {
 				ServerLog.err("The Voring-Inventory text caused a problem. [" + e.getMessage() +"]");
 			}
 
-			voteGUIItemOne = new ItemStack(Material.YELLOW_CONCRETE, 1);
+			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)4);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
 			voteGUIItemOneMeta.setDisplayName("§e§l" + Options.msg.get("text.1"));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
-			voteGUIItemTwo = new ItemStack(Material.BLUE_CONCRETE, 1);
+			voteGUIItemTwo = new ItemStack(Material.STAINED_CLAY, 1, (byte)11);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
 			voteGUIItemTwoMeta.setDisplayName("§9§l" + Options.msg.get("text.2"));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
@@ -78,18 +65,18 @@ public class VotingGUIPlayer {
 				ServerLog.err("The Voring-Inventory text caused a problem. [" + e.getMessage() +"]");
 			}
 
-			voteGUIItemOne = new ItemStack(Material.LIME_CONCRETE, 1);
+			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)5);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
 			voteGUIItemOneMeta.setDisplayName("§a§l" + Options.msg.get("text.3"));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
-			voteGUIItemTwo = new ItemStack(Material.RED_CONCRETE, 1);
+			voteGUIItemTwo = new ItemStack(Material.STAINED_CLAY, 1, (byte)14);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
 			voteGUIItemTwoMeta.setDisplayName("§c§l" + Options.msg.get("text.4"));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
 		}
 
-		ItemStack blockedItem = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
+		ItemStack blockedItem = new ItemStack(Material.THIN_GLASS, 1, (byte)0);
 		ItemMeta blockedItemMeta = voteGUIItemOne.getItemMeta();
 		blockedItemMeta.setDisplayName(" ");
 		blockedItem.setItemMeta(blockedItemMeta);
@@ -108,7 +95,4 @@ public class VotingGUIPlayer {
 		Bukkit.getPlayer(this.uuid).openInventory(voteGUI);
 	}
 	
-	void closeInventory() {
-		Bukkit.getPlayer(this.uuid).closeInventory();
-	}
 }

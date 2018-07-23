@@ -22,7 +22,7 @@ public class UpdateListener extends me.F_o_F_1092.TimeVote.PluginManager.UpdateL
 					URLConnection connection = url.openConnection();
 					final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())); 
 					
-					if (!reader.readLine().equals("Version: " + updateString)) {
+					if (!reader.readLine().equals(updateString)) {
 						ServerLog.log("A new update is available.");
 						updateAvailable = true;
 					}
