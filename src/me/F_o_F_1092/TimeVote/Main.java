@@ -38,7 +38,7 @@ public class Main extends JavaPlugin {
 		plugin = this;
 		
 		ServerLog.setPluginTag("§f[§6Time§eVote§f]§6");
-		UpdateListener.initializeUpdateListener(1.41, "1.4.1", 7312);
+		UpdateListener.initializeUpdateListener(1.42, "1.4.2", 7312);
 		UpdateListener.checkForUpdate();
 		
 		setup();
@@ -77,7 +77,7 @@ public class Main extends JavaPlugin {
 				ymlFileConfig.save(fileConfig);
 				ymlFileConfig.set("Version", UpdateListener.getUpdateDoubleVersion());
 				ymlFileConfig.set("GameVersion.SetOwn", false);
-				ymlFileConfig.set("GameVersion.Version", "v1_13_R1");
+				ymlFileConfig.set("GameVersion.Version", "v1_13_R2");
 				ymlFileConfig.set("ColoredConsoleText", true);
 				ymlFileConfig.set("DayTime", 6000);
 				ymlFileConfig.set("NightTime", 18000);
@@ -130,7 +130,7 @@ public class Main extends JavaPlugin {
 							ymlFileConfig.set("UseTitleAPI", null);
 						}
 						ymlFileConfig.set("GameVersion.SetOwn", false);
-						ymlFileConfig.set("GameVersion.Version", "v1_13_R1");
+						ymlFileConfig.set("GameVersion.Version", "v1_13_R2");
 						ymlFileConfig.set("ColoredConsoleText", true);
 					}
 					ymlFileConfig.save(fileConfig);
