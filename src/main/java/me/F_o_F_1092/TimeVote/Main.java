@@ -13,6 +13,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.earth2me.essentials.Essentials;
+
+import lombok.Getter;
 import me.F_o_F_1092.TimeVote.PluginManager.Command;
 import me.F_o_F_1092.TimeVote.PluginManager.CommandListener;
 import me.F_o_F_1092.TimeVote.PluginManager.ServerLog;
@@ -31,6 +34,10 @@ public class Main extends JavaPlugin {
 		return plugin;
 	}
 	
+	// Essentials API
+	@Getter
+	private Essentials essentials;
+	
 	@Override
 	public void onEnable() {
 		System.out.println("[TimeVote] a Plugin by F_o_F_1092");
@@ -48,6 +55,15 @@ public class Main extends JavaPlugin {
 
 		this.getCommand("TimeVote").setExecutor(new CommandTimeVote());
 		this.getCommand("TimeVote").setTabCompleter(new CommandTimeVoteTabCompleter());
+		
+		if (this.getServer().getPluginManager().getPlugin("Essentials") != null) {
+			try {
+				this.essentials = (Essentials) this.getServer().getPluginManager().getPlugin("Essentials");
+				ServerLog.log("§aLoaded Essentials API.");
+			} catch (Exception e) {
+				ServerLog.err("§cFailed loading Essentials API.");
+			}
+		}
 	}
 	
 	@Override

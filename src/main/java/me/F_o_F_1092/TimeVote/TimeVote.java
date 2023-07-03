@@ -124,6 +124,11 @@ public class TimeVote {
 		List<Player> players = new ArrayList<Player>();
 		
 		for (Player p : Bukkit.getWorld(this.worldName).getPlayers()) {
+			// Essentials Vanish Check
+			if (p != null && Main.getPlugin().getEssentials().getUser(p).isVanished()) {
+				continue;
+			}
+			
 			if (checkPlayerAtWorldPermission(p)) {
 				players.add(p);
 			}
