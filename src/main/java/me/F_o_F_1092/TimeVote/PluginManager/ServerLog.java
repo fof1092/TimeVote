@@ -1,5 +1,7 @@
 package me.F_o_F_1092.TimeVote.PluginManager;
 
+import org.bukkit.Bukkit;
+
 public class ServerLog {
 
 	static boolean useColorCodes = false;
@@ -15,11 +17,11 @@ public class ServerLog {
 	
 	
 	public static void log(String string) {
-		System.out.println(replaceColor(ServerLog.pluginTag + " " + string + "§r"));
+		Bukkit.getServer().getConsoleSender().sendMessage(replaceColor(ServerLog.pluginTag + " " + string + "§r"));
 	}
 	
 	public static void err(String string) {
-		System.err.println(replaceColor(ServerLog.pluginTag + "§4 " + string + "§r"));
+		Bukkit.getServer().getConsoleSender().sendMessage(replaceColor(ServerLog.pluginTag + "§4 " + string + "§r"));
 	}
 	
 	
