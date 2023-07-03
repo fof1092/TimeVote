@@ -34,13 +34,13 @@ public class HelpPageListener extends me.F_o_F_1092.TimeVote.PluginManager.HelpP
 	}
 	
 	public static void sendNormalMessage(CommandSender cs) {
-		cs.sendMessage(Options.msg.get("color.1") + "§m----------------§r " + pluginNametag + Options.msg.get("color.1") + "§m----------------");
+		cs.sendMessage(Options.msg.get("color.1") + "Â§m----------------Â§r " + pluginNametag + Options.msg.get("color.1") + "Â§m----------------");
 		cs.sendMessage("");
 		for (Command command : CommandListener.getAllCommands()) {
 			cs.sendMessage(command.getHelpMessage().getNormalString());
 		}
 		cs.sendMessage("");
-		cs.sendMessage(Options.msg.get("color.1") + "§m----------------§r " + pluginNametag + Options.msg.get("color.1") + "§m----------------");
+		cs.sendMessage(Options.msg.get("color.1") + "Â§m----------------Â§r " + pluginNametag + Options.msg.get("color.1") + "Â§m----------------");
 	}
 	
 	private static List<HelpMessage> getHelpPageMessages(Player p, List<HelpMessage> personalHelpMessages, int page) {

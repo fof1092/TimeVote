@@ -19,7 +19,7 @@ public class HelpPageListener {
 	protected static String getNavBar(List<HelpMessage> personalHelpMessages, List<HelpMessage> personalHelpPageMessages, int page) {
 		List<JSONMessage> jsonMessages = new ArrayList<JSONMessage>();
 		
-		JSONMessage stringStartMessage = new JSONMessage(Options.msg.get("color.1") + "§m-");
+		JSONMessage stringStartMessage = new JSONMessage(Options.msg.get("color.1") + "Â§m-");
 		
 		JSONMessage stringLastPageMessage1;
 		JSONMessage stringLastPageMessage2;
@@ -28,29 +28,29 @@ public class HelpPageListener {
 			stringLastPageMessage1.setRunCommand(helpCommand + " " + (page));
 			stringLastPageMessage1.setHoverText(Options.msg.get("helpTextGui.3"));
 			
-			stringLastPageMessage2 = new JSONMessage(Options.msg.get("color.1") + "-" + Options.msg.get("color.2") + "[" + Options.msg.get("color.1") + (page) + Options.msg.get("color.2") + "]" + Options.msg.get("color.1") +"§m-");
+			stringLastPageMessage2 = new JSONMessage(Options.msg.get("color.1") + "-" + Options.msg.get("color.2") + "[" + Options.msg.get("color.1") + (page) + Options.msg.get("color.2") + "]" + Options.msg.get("color.1") +"Â§m-");
 		} else {
-			stringLastPageMessage1 = new JSONMessage(Options.msg.get("color.1") + "§m------");
+			stringLastPageMessage1 = new JSONMessage(Options.msg.get("color.1") + "Â§m------");
 			stringLastPageMessage2 = new JSONMessage("");
 		}
 		
-		JSONMessage stringHeaderMessage = new JSONMessage(Options.msg.get("color.1") + "§m---------§r " + pluginNametag.replace("§l", "") + Options.msg.get("color.1") + "§m---------");
+		JSONMessage stringHeaderMessage = new JSONMessage(Options.msg.get("color.1") + "Â§m---------Â§r " + pluginNametag.replace("Â§l", "") + Options.msg.get("color.1") + "Â§m---------");
 		
 		JSONMessage stringNextPageMessage1;
 		JSONMessage stringNextPageMessage2;
 		if ((page + 1) < getMaxPlayerPages(personalHelpMessages)) {
-			stringNextPageMessage1 = new JSONMessage(Options.msg.get("color.1") + "§m-" + Options.msg.get("color.2") + "[" + Options.msg.get("color.1") + (page + 2) + Options.msg.get("color.2") + "]" + Options.msg.get("color.1") + "§m-");
+			stringNextPageMessage1 = new JSONMessage(Options.msg.get("color.1") + "Â§m-" + Options.msg.get("color.2") + "[" + Options.msg.get("color.1") + (page + 2) + Options.msg.get("color.2") + "]" + Options.msg.get("color.1") + "Â§m-");
 			
 			stringNextPageMessage2 = new JSONMessage(Options.msg.get("color.2") + "[" + Options.msg.get("color.1") + ">" + Options.msg.get("color.2") + "]");
 			stringNextPageMessage2.setRunCommand(helpCommand + " " + (page + 2));
 			stringNextPageMessage2.setHoverText(Options.msg.get("helpTextGui.2"));
 			
 		} else {
-			stringNextPageMessage1 = new JSONMessage(Options.msg.get("color.1") + "§m------");
+			stringNextPageMessage1 = new JSONMessage(Options.msg.get("color.1") + "Â§m------");
 			stringNextPageMessage2 = new JSONMessage("");
 		}
 		
-		JSONMessage stringEndMessage = new JSONMessage(Options.msg.get("color.1") + "§m-");
+		JSONMessage stringEndMessage = new JSONMessage(Options.msg.get("color.1") + "Â§m-");
 		
 		
 		jsonMessages.add(stringStartMessage);

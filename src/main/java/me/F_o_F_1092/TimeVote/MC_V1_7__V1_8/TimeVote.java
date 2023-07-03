@@ -35,7 +35,7 @@ public class TimeVote extends me.F_o_F_1092.TimeVote.TimeVote {
 			try {
 				objective.setDisplayName(Options.msg.get("[TimeVote]") + Options.msg.get("color.1") + Options.msg.get("text.1"));
 			} catch (Exception e) {
-				objective.setDisplayName("§f[§6Time§eVote§f] §6Day");
+				objective.setDisplayName("Â§f[Â§6TimeÂ§eVoteÂ§f] Â§6Day");
 				
 				ServerLog.err("The scoreboard name caused a problem. (Message: text.1) [" + e.getMessage() +"]");
 			}
@@ -43,7 +43,7 @@ public class TimeVote extends me.F_o_F_1092.TimeVote.TimeVote {
 			try {
 				objective.setDisplayName(Options.msg.get("[TimeVote]") +  Options.msg.get("color.1") + Options.msg.get("text.2"));
 			} catch (Exception e) {
-				objective.setDisplayName("§f[§6Time§eVote§f] §6Night");
+				objective.setDisplayName("Â§f[Â§6TimeÂ§eVoteÂ§f] Â§6Night");
 				
 				ServerLog.err("The scoreboard name caused a problem. (Message: text.2) [" + e.getMessage() +"]");
 			}

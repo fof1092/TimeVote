@@ -37,7 +37,7 @@ public class Main extends JavaPlugin {
 
 		plugin = this;
 		
-		ServerLog.setPluginTag("§f[§6Time§eVote§f]§6");
+		ServerLog.setPluginTag("Â§f[Â§6TimeÂ§eVoteÂ§f]Â§6");
 		UpdateListener.initializeUpdateListener(1.42, "1.4.2", 7312);
 		UpdateListener.checkForUpdate();
 		
@@ -143,10 +143,10 @@ public class Main extends JavaPlugin {
 		ServerLog.setUseColoredColores(ymlFileConfig.getBoolean("ColoredConsoleText"));
 		
 		if (!ymlFileConfig.getBoolean("GameVersion.SetOwn")) {
-			ServerLog.log("ServerType:§e " + VersionManager.getSetverTypeString() + "§6, Version:§e " + VersionManager.getBukkitVersion());
+			ServerLog.log("ServerType:Â§e " + VersionManager.getSetverTypeString() + "Â§6, Version:Â§e " + VersionManager.getBukkitVersion());
 		} else {
 			VersionManager.setVersionManager(ymlFileConfig.getString("GameVersion.Version"), ServerType.BUKKIT, true);
-			ServerLog.log("ServerType:§e " + VersionManager.getSetverTypeString() + "§6, Version:§e " + VersionManager.getBukkitVersion() + "§6 | §e(Self configurated)");
+			ServerLog.log("ServerType:Â§e " + VersionManager.getSetverTypeString() + "Â§6, Version:Â§e " + VersionManager.getBukkitVersion() + "Â§6 | Â§e(Self configurated)");
 		}
 		
 		Options.dayTime = ymlFileConfig.getLong("DayTime");

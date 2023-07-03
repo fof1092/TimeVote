@@ -1,4 +1,4 @@
-package me.F_o_F_1092.TimeVote.VotingGUI.MC_V1_7__V1_12;
+package me.F_o_F_1092.TimeVote.VotingGUI;
 
 import java.util.UUID;
 
@@ -14,10 +14,23 @@ import me.F_o_F_1092.TimeVote.TimeVote.Time;
 import me.F_o_F_1092.TimeVote.TimeVoteListener;
 import me.F_o_F_1092.TimeVote.PluginManager.ServerLog;
 
-public class VotingGUIPlayer extends me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIPlayer {
+public class VotingGUIPlayer {
 
-	public VotingGUIPlayer(UUID uuid, String worldName) {
-		super(uuid, worldName);
+	protected UUID uuid;
+	protected String worldName;
+	
+	
+	protected VotingGUIPlayer(UUID uuid, String worldName) {
+		this.uuid = uuid;
+		this.worldName = worldName;
+	}
+	
+	UUID getUUID() {
+		return this.uuid;
+	}
+	
+	String getWorldName() {
+		return this.worldName;
 	}
 	
 	protected void openVoteingGUI() {
@@ -29,19 +42,19 @@ public class VotingGUIPlayer extends me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIP
 			try {
 				voteGUI = Bukkit.createInventory(null, 9, Options.msg.get("votingInventoryTitle.1"));
 			} catch (Exception e) {
-				voteGUI = Bukkit.createInventory(null, 9, "§f[§6§lT§e§lV§f]" + Options.msg.get("color.2") + " Voting...");
+				voteGUI = Bukkit.createInventory(null, 9, "f[6lTelVf]" + Options.msg.get("color.2") + " Voting...");
 				
 				ServerLog.err("The Voring-Inventory text caused a problem. [" + e.getMessage() +"]");
 			}
 
-			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)4);
+			voteGUIItemOne = new ItemStack(Material.YELLOW_CONCRETE, 1);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
-			voteGUIItemOneMeta.setDisplayName("§e§l" + Options.msg.get("text.1"));
+			voteGUIItemOneMeta.setDisplayName("el" + Options.msg.get("text.1"));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
-			voteGUIItemTwo = new ItemStack(Material.STAINED_CLAY, 1, (byte)11);
+			voteGUIItemTwo = new ItemStack(Material.BLUE_CONCRETE, 1);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
-			voteGUIItemTwoMeta.setDisplayName("§9§l" + Options.msg.get("text.2"));
+			voteGUIItemTwoMeta.setDisplayName("9l" + Options.msg.get("text.2"));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
 		} else {
 			TimeVote timeVote = TimeVoteListener.getVoteing(this.worldName);
@@ -57,26 +70,26 @@ public class VotingGUIPlayer extends me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIP
 				
 			} catch (Exception e) {
 				if (timeVote.getTime() == Time.DAY) {
-					voteGUI = Bukkit.createInventory(null, 9, "§f[§6§lT§e§lV§f] " + Options.msg.get("color.2") + "Day");
+					voteGUI = Bukkit.createInventory(null, 9, "f[6lTelVf] " + Options.msg.get("color.2") + "Day");
 				} else {
-					voteGUI = Bukkit.createInventory(null, 9, "§f[§6§lT§e§lV§f] " + Options.msg.get("color.2") + "Night");
+					voteGUI = Bukkit.createInventory(null, 9, "f[6lTelVf] " + Options.msg.get("color.2") + "Night");
 				}
 				
 				ServerLog.err("The Voring-Inventory text caused a problem. [" + e.getMessage() +"]");
 			}
 
-			voteGUIItemOne = new ItemStack(Material.STAINED_CLAY, 1, (byte)5);
+			voteGUIItemOne = new ItemStack(Material.LIME_CONCRETE, 1);
 			ItemMeta voteGUIItemOneMeta = voteGUIItemOne.getItemMeta();
-			voteGUIItemOneMeta.setDisplayName("§a§l" + Options.msg.get("text.3"));
+			voteGUIItemOneMeta.setDisplayName("al" + Options.msg.get("text.3"));
 			voteGUIItemOne.setItemMeta(voteGUIItemOneMeta);
 
-			voteGUIItemTwo = new ItemStack(Material.STAINED_CLAY, 1, (byte)14);
+			voteGUIItemTwo = new ItemStack(Material.RED_CONCRETE, 1);
 			ItemMeta voteGUIItemTwoMeta = voteGUIItemTwo.getItemMeta();
-			voteGUIItemTwoMeta.setDisplayName("§c§l" + Options.msg.get("text.4"));
+			voteGUIItemTwoMeta.setDisplayName("cl" + Options.msg.get("text.4"));
 			voteGUIItemTwo.setItemMeta(voteGUIItemTwoMeta);
 		}
 
-		ItemStack blockedItem = new ItemStack(Material.THIN_GLASS, 1, (byte)0);
+		ItemStack blockedItem = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
 		ItemMeta blockedItemMeta = voteGUIItemOne.getItemMeta();
 		blockedItemMeta.setDisplayName(" ");
 		blockedItem.setItemMeta(blockedItemMeta);
@@ -95,4 +108,7 @@ public class VotingGUIPlayer extends me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIP
 		Bukkit.getPlayer(this.uuid).openInventory(voteGUI);
 	}
 	
+	void closeInventory() {
+		Bukkit.getPlayer(this.uuid).closeInventory();
+	}
 }
