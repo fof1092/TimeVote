@@ -101,6 +101,7 @@
 			<groupId>com.github.ConnorLinfoot</groupId>
 			<artifactId>TitleAPI</artifactId>
 			<version>1.8.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- EssentialsX API -->
