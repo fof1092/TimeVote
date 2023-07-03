@@ -9,16 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.F_o_F_1092.TimeVote.TimeVote.Time;
-import me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIListener;
 import me.F_o_F_1092.TimeVote.PluginManager.CommandListener;
 import me.F_o_F_1092.TimeVote.PluginManager.JSONMessage;
-import me.F_o_F_1092.TimeVote.PluginManager.Spigot.HelpPageListener;
-import me.F_o_F_1092.TimeVote.PluginManager.Spigot.JSONMessageListener;
-import me.F_o_F_1092.TimeVote.PluginManager.Spigot.UpdateListener;
-import me.F_o_F_1092.TimeVote.PluginManager.VersionManager.BukkitVersion;
 import me.F_o_F_1092.TimeVote.PluginManager.Math;
 import me.F_o_F_1092.TimeVote.PluginManager.ServerLog;
 import me.F_o_F_1092.TimeVote.PluginManager.VersionManager;
+import me.F_o_F_1092.TimeVote.PluginManager.VersionManager.BukkitVersion;
+import me.F_o_F_1092.TimeVote.PluginManager.Spigot.HelpPageListener;
+import me.F_o_F_1092.TimeVote.PluginManager.Spigot.JSONMessageListener;
+import me.F_o_F_1092.TimeVote.PluginManager.Spigot.UpdateListener;
+import me.F_o_F_1092.TimeVote.VotingGUI.VotingGUIListener;
 
 public class CommandTimeVote implements CommandExecutor {
 
@@ -98,7 +98,7 @@ public class CommandTimeVote implements CommandExecutor {
 					replaceCommand = replaceCommand.replace("[COMMAND]", CommandListener.getCommand("/tv info").getColoredCommand());
 					cs.sendMessage(Options.msg.get("[TimeVote]") + replaceCommand); 
 				} else {
-					cs.sendMessage("§6§m-----------§f [§6§lTime§e§lVote§f] §6§m-----------");
+					cs.sendMessage("Â§6Â§m-----------Â§f [Â§6Â§lTimeÂ§eÂ§lVoteÂ§f] Â§6Â§m-----------");
 					cs.sendMessage("");
 					
 					if (cs instanceof Player) {
@@ -106,9 +106,9 @@ public class CommandTimeVote implements CommandExecutor {
 						
 						List<JSONMessage> jsonFoFMessages = new ArrayList<JSONMessage>();
 						
-						JSONMessage FoFText = new JSONMessage("§6By: ");
-						JSONMessage FoFLink = new JSONMessage("§eF_o_F_1092");
-						FoFLink.setHoverText("§6[§eOpen my Website§6]");
+						JSONMessage FoFText = new JSONMessage("Â§6By: ");
+						JSONMessage FoFLink = new JSONMessage("Â§eF_o_F_1092");
+						FoFLink.setHoverText("Â§6[Â§eOpen my WebsiteÂ§6]");
 						FoFLink.setOpenURL("https://fof1092.de");
 						
 						jsonFoFMessages.add(FoFText);
@@ -120,9 +120,9 @@ public class CommandTimeVote implements CommandExecutor {
 						
 						List<JSONMessage> jsonTwitterMessages = new ArrayList<JSONMessage>();
 						
-						JSONMessage twitterText = new JSONMessage("§6Twitter: ");
-						JSONMessage twitterLink = new JSONMessage("§e@F_o_F_1092");
-						twitterLink.setHoverText("§6[§eOpen Twitter§6]");
+						JSONMessage twitterText = new JSONMessage("Â§6Twitter: ");
+						JSONMessage twitterLink = new JSONMessage("Â§e@F_o_F_1092");
+						twitterLink.setHoverText("Â§6[Â§eOpen TwitterÂ§6]");
 						twitterLink.setOpenURL("https://twitter.com/F_o_F_1092");
 						
 						jsonTwitterMessages.add(twitterText);
@@ -131,13 +131,13 @@ public class CommandTimeVote implements CommandExecutor {
 						JSONMessageListener.send(p, JSONMessageListener.putJSONMessagesTogether(jsonTwitterMessages));
 					
 						cs.sendMessage("");
-						cs.sendMessage("§6Version: §e" + UpdateListener.getUpdateStringVersion());
+						cs.sendMessage("Â§6Version: Â§e" + UpdateListener.getUpdateStringVersion());
 						
 						List<JSONMessage> jsonPluginPageMessages = new ArrayList<JSONMessage>();
 						
-						JSONMessage pluginWebsiteText = new JSONMessage("§6TimeVote: ");
-						JSONMessage pluginWebsiteLink = new JSONMessage("§ehttps://fof1092.de/Plugins/TV");
-						pluginWebsiteLink.setHoverText("§6[§eOpen the Plugin Page§6]");
+						JSONMessage pluginWebsiteText = new JSONMessage("Â§6TimeVote: ");
+						JSONMessage pluginWebsiteLink = new JSONMessage("Â§ehttps://fof1092.de/Plugins/TV");
+						pluginWebsiteLink.setHoverText("Â§6[Â§eOpen the Plugin PageÂ§6]");
 						pluginWebsiteLink.setOpenURL("https://fof1092.de/Plugins/TV");
 						
 						jsonPluginPageMessages.add(pluginWebsiteText);
@@ -146,16 +146,16 @@ public class CommandTimeVote implements CommandExecutor {
 						JSONMessageListener.send(p, JSONMessageListener.putJSONMessagesTogether(jsonPluginPageMessages));
 					
 					} else {
-						cs.sendMessage("§6By: §eF_o_F_1092");
+						cs.sendMessage("Â§6By: Â§eF_o_F_1092");
 						cs.sendMessage("");
-						cs.sendMessage("§6Twitter: §e@F_o_F_1092");
+						cs.sendMessage("Â§6Twitter: Â§e@F_o_F_1092");
 						cs.sendMessage("");
-						cs.sendMessage("§6Version: §e" + UpdateListener.getUpdateStringVersion());
-						cs.sendMessage("§6TimeVote: §ehttps://fof1092.de/Plugins/TV");
+						cs.sendMessage("Â§6Version: Â§e" + UpdateListener.getUpdateStringVersion());
+						cs.sendMessage("Â§6TimeVote: Â§ehttps://fof1092.de/Plugins/TV");
 					}
 					
 					cs.sendMessage("");
-					cs.sendMessage("§6§m-----------§f [§6§lTime§e§lVote§f] §6§m-----------");
+					cs.sendMessage("Â§6Â§m-----------Â§f [Â§6Â§lTimeÂ§eÂ§lVoteÂ§f] Â§6Â§m-----------");
 				}
 			} else if (args[0].equalsIgnoreCase("stats")) {
 				if (args.length != 1) {
