@@ -13,8 +13,6 @@ import me.F_o_F_1092.TimeVote.PluginManager.CommandListener;
 import me.F_o_F_1092.TimeVote.PluginManager.JSONMessage;
 import me.F_o_F_1092.TimeVote.PluginManager.Math;
 import me.F_o_F_1092.TimeVote.PluginManager.ServerLog;
-import me.F_o_F_1092.TimeVote.PluginManager.VersionManager;
-import me.F_o_F_1092.TimeVote.PluginManager.VersionManager.BukkitVersion;
 import me.F_o_F_1092.TimeVote.PluginManager.Spigot.HelpPageListener;
 import me.F_o_F_1092.TimeVote.PluginManager.Spigot.JSONMessageListener;
 import me.F_o_F_1092.TimeVote.PluginManager.Spigot.UpdateListener;
@@ -222,57 +220,14 @@ public class CommandTimeVote implements CommandExecutor {
 
 											TimeVoteListener.getVault().withdrawPlayer(p, Options.price);
 											
-											
-											if (VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R2 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R4 ||
-													
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R2 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R3) {
-													
-												timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_7__V1_8.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
-											} else if (VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R2 ||
-														
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_10_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_11_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_12_R1) {
-													
-												timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_9__V1_12.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
-											} else {
-												timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
-											}
+											timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
 										}
 									} else {
 										if (Options.price > 0.0) {
 											ServerLog.log("The plugin Vault was not found, but a Voting-Price was set in the Config.yml file.");
 										}
 										
-										if (VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R2 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R4 ||
-											
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R2 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R3) {
-											
-											timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_7__V1_8.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
-										} else if (VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R2 ||
-												
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_10_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_11_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_12_R1) {
-											
-											timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_9__V1_12.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
-										} else {
-											timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
-										}
+										timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.DAY, p.getUniqueId());
 									}
 									
 									if (timeVote != null) {
@@ -327,56 +282,14 @@ public class CommandTimeVote implements CommandExecutor {
 											TimeVoteListener.getVault().withdrawPlayer(p, Options.price);
 											
 											
-											if (VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R2 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R4 ||
-														
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R2 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R3) {
-														
-												timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_7__V1_8.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
-											} else if (VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R2 ||
-															
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_10_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_11_R1 ||
-												VersionManager.getBukkitVersion() == BukkitVersion.v1_12_R1) {
-														
-												timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_9__V1_12.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
-											} else {
-												timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
-											}
+											timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
 										}
 									} else {
 										if (Options.price > 0.0) {
 											ServerLog.log("The plugin Vault was not found, but a Voting-Price was set in the Config.yml file.");
 										}
-										
-										if (VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R2 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R3 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_7_R4 ||
-												
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R2 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_8_R3) {
-												
-											timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_7__V1_8.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
-										} else if (VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_9_R2 ||
-													
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_10_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_11_R1 ||
-											VersionManager.getBukkitVersion() == BukkitVersion.v1_12_R1) {
-												
-											timeVote = new  me.F_o_F_1092.TimeVote.MC_V1_9__V1_12.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
-										} else {
-											timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
-										}
+
+										timeVote = new  me.F_o_F_1092.TimeVote.TimeVote(p.getWorld().getName(), Time.NIGHT, p.getUniqueId());
 									}
 									
 									if (timeVote != null) {
