@@ -59,19 +59,12 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
-			<name>Vault Repository</name>
-			<id>vault-repo</id>
-			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 		<repository>
-			<name>BossbarAPI Repository</name>
-			<id>inventive-repo</id>
-			<url>https://repo.inventivetalent.org/content/groups/public/</url>
-		</repository>
-		<repository>
-			<name>TitleAPI Repository</name>
-			<id>androkai-repo</id>
-			<url>https://repo.androkai.net/minecraft</url>
+			<id>simplyrin-repo</id>
+			<url>https://api.simplyrin.net/maven/</url>
 		</repository>
 	</repositories>
 
@@ -86,25 +79,26 @@
 
 		<!-- Vault -->
 		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
+			<groupId>com.github.MilkBowl</groupId>
 			<artifactId>VaultAPI</artifactId>
-			<version>1.6</version>
+			<version>1.7</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- BossbarAPI -->
 		<dependency>
 			<groupId>org.inventivetalent</groupId>
 			<artifactId>bossbarapi</artifactId>
-			<version>2.4.1</version>
+			<version>2.4.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- TitleAPI -->
 		<dependency>
-			<groupId>com.connorlinfoot</groupId>
+			<groupId>com.github.ConnorLinfoot</groupId>
 			<artifactId>TitleAPI</artifactId>
-			<version>1.7.4</version>
+			<version>1.8.1</version>
 		</dependency>
 
 	</dependencies>
 
-</project> 
+</project>
